@@ -18,7 +18,7 @@ async function main() {
   const greeter = await Greeter.deploy('Hello, Hardhat!')
 
   await greeter.deployed()
-
+  // eslint-disable-next-line no-console
   console.log('Greeter deployed to:', greeter.address)
 }
 
