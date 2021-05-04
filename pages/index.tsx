@@ -1,4 +1,5 @@
 import WalletConnectProvider from '@walletconnect/web3-provider'
+import blockies from 'blockies-ts'
 import { ethers, providers } from 'ethers'
 import Head from 'next/head'
 import { useCallback, useEffect, useReducer } from 'react'
@@ -146,6 +147,11 @@ export const Home = (): JSX.Element => {
     }
   }
 
+  let blockieImageSrc
+  if (typeof window !== 'undefined') {
+    blockieImageSrc = blockies.create({ seed: state.address }).toDataURL()
+  }
+
   return (
     <div>
       <Head>
@@ -157,7 +163,10 @@ export const Home = (): JSX.Element => {
           <div className="px-6 py-8">
             <div className="flex items-center">
               {state.address ? (
-                <p className="ml-auto">{state.address}</p>
+                <div className="ml-auto flex items-center">
+                  <img src={blockieImageSrc} alt="blockie" />
+                  <p className="ml-4">{state.address}</p>
+                </div>
               ) : (
                 <button
                   type="button"
