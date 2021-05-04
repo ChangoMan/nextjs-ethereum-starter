@@ -1,7 +1,7 @@
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { ethers, providers } from 'ethers'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useReducer } from 'react'
 import Web3Modal from 'web3modal'
 import Greeter from '../src/artifacts/contracts/Greeter.sol/Greeter.json'
 
@@ -15,6 +15,7 @@ declare global {
 // Update with the contract address logged out to the CLI when it was deployed
 const GREETER_ADDRESS = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
 
+// web3Modal is used to connect to various wallets.
 let web3Modal
 if (typeof window !== 'undefined') {
   web3Modal = new Web3Modal({
@@ -31,24 +32,58 @@ if (typeof window !== 'undefined') {
   })
 }
 
-const onConnect = async () => {
-  const provider = await web3Modal.connect()
-  const web3Provider = new providers.Web3Provider(provider)
-  // eslint-disable-next-line no-console
-  console.log(web3Provider)
+interface IAppState {
+  greeting: string
+  inputValue: string
+  web3Provider: any
+  connected: boolean
+}
+
+const initialState: IAppState = {
+  greeting: '',
+  inputValue: '',
+  web3Provider: null,
+  connected: false,
+}
+
+function reducer(state, action) {
+  switch (action.type) {
+    // Track the greeting from the blockchain
+    case 'SET_GREETING':
+      return {
+        ...state,
+        greeting: action.greeting,
+      }
+    case 'SET_INPUT_VALUE':
+      return {
+        ...state,
+        inputValue: action.inputValue,
+      }
+    case 'SET_WEB3_PROVIDER':
+      return {
+        ...state,
+        web3Provider: action.web3Provider,
+        connected: true,
+      }
+    default:
+      throw new Error()
+  }
 }
 
 export const Home = (): JSX.Element => {
-  // Track the greeting from the blockchain
-  const [greeting, setGreeting] = useState('')
-  // Track the greetingInputValue from the input
-  const [greetingInputValue, setGreetingInputValue] = useState('')
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  const onWeb3Connect = useCallback(async () => {
+    const provider = await web3Modal.connect()
+    const web3Provider = new providers.Web3Provider(provider)
+    dispatch({ type: 'SET_WEB3_PROVIDER', web3Provider })
+  }, [])
 
   useEffect(() => {
     if (web3Modal.cachedProvider) {
-      onConnect()
+      onWeb3Connect()
     }
-  }, [])
+  }, [onWeb3Connect])
 
   // request access to the user's MetaMask account
   async function requestAccount() {
@@ -57,18 +92,16 @@ export const Home = (): JSX.Element => {
 
   // call the smart contract, read the current greeting value
   async function fetchContractGreeting() {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
+    if (state.web3Provider) {
+      // const provider = new providers.Web3Provider(window.ethereum)
       const contract = new ethers.Contract(
         GREETER_ADDRESS,
         Greeter.abi,
-        provider
+        state.web3Provider
       )
       try {
         const data = await contract.greet()
-        // eslint-disable-next-line no-console
-        console.log('greetingInputValue: ', data)
-        setGreeting(data)
+        dispatch({ type: 'SET_GREETING', greeting: data })
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log('Error: ', err)
@@ -78,13 +111,13 @@ export const Home = (): JSX.Element => {
 
   // call the smart contract, send an update
   async function setContractGreeting() {
-    if (!greetingInputValue) return
-    if (typeof window.ethereum !== 'undefined') {
+    if (!state.inputValue) return
+    if (state.web3Provider) {
       await requestAccount()
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const signer = provider.getSigner()
+      // const provider = new providers.Web3Provider(window.ethereum)
+      const signer = state.web3Provider.getSigner()
       const contract = new ethers.Contract(GREETER_ADDRESS, Greeter.abi, signer)
-      const transaction = await contract.setGreeting(greetingInputValue)
+      const transaction = await contract.setGreeting(state.inputValue)
       await transaction.wait()
       fetchContractGreeting()
     }
@@ -99,13 +132,15 @@ export const Home = (): JSX.Element => {
       <header>
         <div className="container mx-auto">
           <div className="px-6 py-8">
-            <button
-              type="button"
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              onClick={onConnect}
-            >
-              Connect Wallet
-            </button>
+            <div className="flex">
+              <button
+                type="button"
+                className="ml-auto inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={onWeb3Connect}
+              >
+                Connect Wallet
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -114,7 +149,7 @@ export const Home = (): JSX.Element => {
         <div className="container mx-auto">
           <div className="px-6 py-8">
             <div>
-              <p className="mb-3 text-xl">Greeting: {greeting}</p>
+              <p className="mb-3 text-xl">Greeting: {state.greeting}</p>
               <button
                 type="button"
                 className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -126,8 +161,13 @@ export const Home = (): JSX.Element => {
             <div className="mt-12">
               <input
                 type="text"
-                onChange={(e) => setGreetingInputValue(e.target.value)}
                 placeholder="Enter a Greeting"
+                onChange={(e) => {
+                  dispatch({
+                    type: 'SET_INPUT_VALUE',
+                    inputValue: e.target.value,
+                  })
+                }}
               />
               <div className="mt-3">
                 <button
