@@ -8,20 +8,32 @@ Bootstrap a developer-friendly NextJS app configured with:
 - Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks
 - Testing with [Jest](https://jestjs.io/) and [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro)
 
-## Deploy your own
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-typescript-eslint-jest&project-name=with-typescript-eslint-jest&repository-name=with-typescript-eslint-jest)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+## Getting Started
 
 ```bash
-npx create-next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
+git clone https://github.com/ChangoMan/scaffold-eth-nextjs.git
+cd scaffold-eth-nextjs
+
+yarn install
 # or
-yarn create next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
+npm install
+
+# Start up the Hardhat Network
+npx hardhat node
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+Here we just install the npm project's dependencies, and by running `npx hardhat node` we spin up an instance of Hardhat Network that you can connect to using MetaMask. In a different terminal in the same directory, run:
+
+```bash
+npx hardhat run scripts/deploy.js --network localhost
+```
+
+This will deploy the contract to Hardhat Network. After this completes run:
+
+```bash
+yarn dev
+# or
+npm run dev
+```
+
+This will start up the Next.js development server and your site will be available at http://localhost:3000/
