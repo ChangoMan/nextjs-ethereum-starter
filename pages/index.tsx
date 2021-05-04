@@ -32,21 +32,37 @@ if (typeof window !== 'undefined') {
   })
 }
 
-interface IAppState {
+type StateType = {
   greeting: string
   inputValue: string
   web3Provider: any
+  address?: string
   connected: boolean
 }
+type ActionType =
+  | {
+      type: 'SET_GREETING'
+      greeting: string
+    }
+  | {
+      type: 'SET_INPUT_VALUE'
+      inputValue: string
+    }
+  | {
+      type: 'SET_WEB3_PROVIDER'
+      web3Provider: any
+      address?: string
+    }
 
-const initialState: IAppState = {
+const initialState: StateType = {
   greeting: '',
   inputValue: '',
   web3Provider: null,
+  address: null,
   connected: false,
 }
 
-function reducer(state, action) {
+function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
     // Track the greeting from the blockchain
     case 'SET_GREETING':
@@ -63,6 +79,7 @@ function reducer(state, action) {
       return {
         ...state,
         web3Provider: action.web3Provider,
+        address: action.address,
         connected: true,
       }
     default:
@@ -76,7 +93,13 @@ export const Home = (): JSX.Element => {
   const onWeb3Connect = useCallback(async () => {
     const provider = await web3Modal.connect()
     const web3Provider = new providers.Web3Provider(provider)
-    dispatch({ type: 'SET_WEB3_PROVIDER', web3Provider })
+    const signer = web3Provider.getSigner()
+    const address = await signer.getAddress()
+    dispatch({
+      type: 'SET_WEB3_PROVIDER',
+      web3Provider,
+      address,
+    })
   }, [])
 
   useEffect(() => {
@@ -132,14 +155,18 @@ export const Home = (): JSX.Element => {
       <header>
         <div className="container mx-auto">
           <div className="px-6 py-8">
-            <div className="flex">
-              <button
-                type="button"
-                className="ml-auto inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={onWeb3Connect}
-              >
-                Connect Wallet
-              </button>
+            <div className="flex items-center">
+              {state.address ? (
+                <p className="ml-auto">{state.address}</p>
+              ) : (
+                <button
+                  type="button"
+                  className="ml-auto inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  onClick={onWeb3Connect}
+                >
+                  Connect Wallet
+                </button>
+              )}
             </div>
           </div>
         </div>
