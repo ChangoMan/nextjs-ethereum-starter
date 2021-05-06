@@ -1,12 +1,18 @@
-# NextJS Typescript Boilerplate
+# scaffold-eth-nextjs
 
-Bootstrap a developer-friendly NextJS app configured with:
+This is a work in progress!
+
+My iteration of [Austin Griffith's scaffold-eth](https://github.com/austintgriffith/scaffold-eth). Also inspired by [Nader Dabit]
+(https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
 
 - [Typescript](https://www.typescriptlang.org/)
 - Linting with [ESLint](https://eslint.org/)
 - Formatting with [Prettier](https://prettier.io/)
 - Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks
 - Testing with [Jest](https://jestjs.io/) and [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro)
+- Tailwind CSS
+- Hardhat
+- Ethers.js
 
 ## Getting Started
 
