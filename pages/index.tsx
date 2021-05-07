@@ -4,7 +4,7 @@ import { ethers, providers } from 'ethers'
 import Head from 'next/head'
 import { useCallback, useEffect, useReducer } from 'react'
 import Web3Modal from 'web3modal'
-import EnzymeQuery from '../components/EnzymeQuery'
+import TheGraphQuery from '../components/TheGraphQuery'
 import Greeter from '../src/artifacts/contracts/Greeter.sol/Greeter.json'
 
 // Extends `window` to add `ethereum`.
@@ -216,7 +216,7 @@ export const Home = (): JSX.Element => {
                 </button>
               </div>
             </div>
-            <EnzymeQuery />
+            <TheGraphQuery />
           </div>
         </div>
       </main>

@@ -12,8 +12,10 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: new HttpLink({
-      uri: 'https://api.thegraph.com/subgraphs/name/enzymefinance/enzyme', // Server URL (must be absolute)
-      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+      // Server URL (must be absolute)
+      uri: 'https://api.thegraph.com/subgraphs/name/graphprotocol/compound-v2',
+      // Additional fetch() options like `credentials` or `headers`
+      credentials: 'same-origin',
     }),
     cache: new InMemoryCache({
       typePolicies: {
