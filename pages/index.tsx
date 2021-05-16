@@ -4,6 +4,8 @@ import { ethers, providers } from 'ethers'
 import Head from 'next/head'
 import { useCallback, useEffect, useReducer } from 'react'
 import Web3Modal from 'web3modal'
+import Button from '../components/Button'
+import Signature from '../components/Signature'
 import TheGraphQuery from '../components/TheGraphQuery'
 import Greeter from '../src/artifacts/contracts/Greeter.sol/Greeter.json'
 
@@ -169,13 +171,7 @@ export const Home = (): JSX.Element => {
                   <p className="ml-4">{state.address}</p>
                 </div>
               ) : (
-                <button
-                  type="button"
-                  className="ml-auto inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  onClick={onWeb3Connect}
-                >
-                  Connect Wallet
-                </button>
+                <Button onClick={onWeb3Connect}>Connect Wallet</Button>
               )}
             </div>
           </div>
@@ -186,14 +182,11 @@ export const Home = (): JSX.Element => {
         <div className="container mx-auto">
           <div className="px-6 py-8">
             <div>
+              <h2 className="mt-12 mb-8 font-semibold text-lg">
+                Greeting Component
+              </h2>
               <p className="mb-3 text-xl">Greeting: {state.greeting}</p>
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={fetchContractGreeting}
-              >
-                Fetch Greeting
-              </button>
+              <Button onClick={fetchContractGreeting}>Fetch Greeting</Button>
             </div>
             <div className="mt-12">
               <input
@@ -207,15 +200,12 @@ export const Home = (): JSX.Element => {
                 }}
               />
               <div className="mt-3">
-                <button
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  onClick={setContractGreeting}
-                >
-                  Set Greeting
-                </button>
+                <Button onClick={setContractGreeting}>Set Greeting</Button>
               </div>
             </div>
+            <hr className="my-8" />
+            <Signature web3Provider={state.web3Provider} />
+            <hr className="my-8" />
             <TheGraphQuery />
           </div>
         </div>

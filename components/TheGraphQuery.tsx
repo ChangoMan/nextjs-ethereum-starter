@@ -19,9 +19,7 @@ function TheGraphQuery(): JSX.Element {
 
   return (
     <div>
-      <h2 className="mt-12 font-semibold text-lg">
-        This component queries the Compound V2 subgraph
-      </h2>
+      <h2 className="mt-12 font-semibold text-lg">Graph Query Component</h2>
       {data.markets.map(
         ({ id, underlyingName, underlyingSymbol, underlyingPriceUSD }) => (
           <div key={id} className="mt-8">
