@@ -57,6 +57,13 @@ type ActionType =
       web3Provider: any
       address?: string
     }
+  | {
+      type: 'SET_ADDRESS'
+      address?: string
+    }
+  | {
+      type: 'RESET_WEB3_PROVIDER'
+    }
 
 const initialState: StateType = {
   greeting: '',
@@ -86,6 +93,18 @@ function reducer(state: StateType, action: ActionType): StateType {
         address: action.address,
         connected: true,
       }
+    case 'SET_ADDRESS':
+      return {
+        ...state,
+        address: action.address,
+      }
+    case 'RESET_WEB3_PROVIDER':
+      return {
+        ...state,
+        web3Provider: null,
+        address: null,
+        connected: false,
+      }
     default:
       throw new Error()
   }
@@ -94,8 +113,56 @@ function reducer(state: StateType, action: ActionType): StateType {
 export const Home = (): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  const resetApp = useCallback(async () => {
+    if (
+      state.web3Provider &&
+      state.web3Provider.currentProvider &&
+      state.web3Provider.currentProvider.close
+    ) {
+      await state.web3Provider.currentProvider.close()
+    }
+    await web3Modal.clearCachedProvider()
+    dispatch({
+      type: 'RESET_WEB3_PROVIDER',
+    })
+    // this.setState({ ...INITIAL_STATE });
+  }, [state.web3Provider])
+
+  // From https://github.com/Web3Modal/web3modal/blob/master/example/src/App.tsx
+  const subscribeProvider = useCallback(
+    async (provider: any) => {
+      if (!provider.on) {
+        return
+      }
+
+      provider.on('close', () => resetApp())
+
+      provider.on('accountsChanged', async (accounts: string[]) => {
+        dispatch({
+          type: 'SET_ADDRESS',
+          address: accounts[0],
+        })
+      })
+      // provider.on("chainChanged", async (chainId: number) => {
+      //   const { web3 } = this.state;
+      //   const networkId = await web3.eth.net.getId();
+      //   await this.setState({ chainId, networkId });
+      //   // await this.getAccountAssets();
+      // });
+
+      // provider.on("networkChanged", async (networkId: number) => {
+      //   const { web3 } = this.state;
+      //   const chainId = await web3.eth.chainId();
+      //   await this.setState({ chainId, networkId });
+      //   // await this.getAccountAssets();
+      // });
+    },
+    [resetApp]
+  )
+
   const onWeb3Connect = useCallback(async () => {
     const provider = await web3Modal.connect()
+    await subscribeProvider(provider)
     const web3Provider = new providers.Web3Provider(provider)
     const signer = web3Provider.getSigner()
     const address = await signer.getAddress()
@@ -104,7 +171,7 @@ export const Home = (): JSX.Element => {
       web3Provider,
       address,
     })
-  }, [])
+  }, [subscribeProvider])
 
   useEffect(() => {
     if (web3Modal.cachedProvider) {
