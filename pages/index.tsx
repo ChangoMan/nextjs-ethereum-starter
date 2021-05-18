@@ -1,12 +1,17 @@
-import WalletConnectProvider from '@walletconnect/web3-provider'
+import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
+import {
+  NoEthereumProviderError,
+  UserRejectedRequestError as UserRejectedRequestErrorInjected,
+} from '@web3-react/injected-connector'
 import blockies from 'blockies-ts'
 import { ethers, providers } from 'ethers'
 import Head from 'next/head'
-import { useCallback, useEffect, useReducer } from 'react'
-import Web3Modal from 'web3modal'
+import React, { useReducer } from 'react'
 import Button from '../components/Button'
 import Signature from '../components/Signature'
 import TheGraphQuery from '../components/TheGraphQuery'
+import { useEagerConnect, useInactiveListener } from '../hooks/web3-react-hooks'
+import { injected } from '../lib/connectors'
 import Greeter from '../src/artifacts/contracts/Greeter.sol/Greeter.json'
 
 // Extends `window` to add `ethereum`.
@@ -19,29 +24,9 @@ declare global {
 // Update with the contract address logged out to the CLI when it was deployed
 const GREETER_ADDRESS = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
 
-// web3Modal is used to connect to various wallets.
-let web3Modal
-if (typeof window !== 'undefined') {
-  web3Modal = new Web3Modal({
-    network: 'mainnet', // optional
-    cacheProvider: true, // optional
-    providerOptions: {
-      walletconnect: {
-        package: WalletConnectProvider, // required
-        options: {
-          infuraId: 'INFURA_ID', // required
-        },
-      },
-    },
-  })
-}
-
 type StateType = {
   greeting: string
   inputValue: string
-  web3Provider: any
-  address?: string
-  connected: boolean
 }
 type ActionType =
   | {
@@ -52,25 +37,10 @@ type ActionType =
       type: 'SET_INPUT_VALUE'
       inputValue: string
     }
-  | {
-      type: 'SET_WEB3_PROVIDER'
-      web3Provider: any
-      address?: string
-    }
-  | {
-      type: 'SET_ADDRESS'
-      address?: string
-    }
-  | {
-      type: 'RESET_WEB3_PROVIDER'
-    }
 
 const initialState: StateType = {
   greeting: '',
   inputValue: '',
-  web3Provider: null,
-  address: null,
-  connected: false,
 }
 
 function reducer(state: StateType, action: ActionType): StateType {
@@ -86,85 +56,52 @@ function reducer(state: StateType, action: ActionType): StateType {
         ...state,
         inputValue: action.inputValue,
       }
-    case 'SET_WEB3_PROVIDER':
-      return {
-        ...state,
-        web3Provider: action.web3Provider,
-        address: action.address,
-        connected: true,
-      }
-    case 'SET_ADDRESS':
-      return {
-        ...state,
-        address: action.address,
-      }
-    case 'RESET_WEB3_PROVIDER':
-      return {
-        ...state,
-        web3Provider: null,
-        address: null,
-        connected: false,
-      }
     default:
       throw new Error()
+  }
+}
+
+function getErrorMessage(error: Error) {
+  if (error instanceof NoEthereumProviderError) {
+    return 'No Ethereum browser extension detected, install MetaMask on desktop or visit from a dApp browser on mobile.'
+  } else if (error instanceof UnsupportedChainIdError) {
+    return "You're connected to an unsupported network."
+  } else if (error instanceof UserRejectedRequestErrorInjected) {
+    return 'Please authorize this website to access your Ethereum account.'
+  } else {
+    console.error(error)
+    return 'An unknown error occurred. Check the console for more details.'
   }
 }
 
 export const Home = (): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const resetApp = useCallback(async (web3Provider) => {
-    if (
-      web3Provider &&
-      web3Provider.currentProvider &&
-      web3Provider.currentProvider.close
-    ) {
-      await web3Provider.currentProvider.close()
-    }
-    await web3Modal.clearCachedProvider()
-    dispatch({
-      type: 'RESET_WEB3_PROVIDER',
-    })
-  }, [])
+  const context = useWeb3React<providers.Web3Provider>()
+  const {
+    connector,
+    library,
+    // chainId,
+    account,
+    activate,
+    deactivate,
+    // active,
+    error,
+  } = context
 
-  // From https://github.com/Web3Modal/web3modal/blob/master/example/src/App.tsx
-  const onWeb3Connect = useCallback(async () => {
-    const provider = await web3Modal.connect()
-    if (!provider.on) {
-      return
+  // handle logic to recognize the connector currently being activated
+  const [activatingConnector, setActivatingConnector] = React.useState<any>()
+  React.useEffect(() => {
+    if (activatingConnector && activatingConnector === connector) {
+      setActivatingConnector(undefined)
     }
-    provider.on('disconnect', () => {
-      resetApp(provider)
-    })
-    provider.on('accountsChanged', (accounts: string[]) => {
-      dispatch({
-        type: 'SET_ADDRESS',
-        address: accounts[0],
-      })
-    })
-    provider.on('chainChanged', (chainId: number) => {
-      // eslint-disable-next-line no-console
-      console.log(chainId)
-      // const { web3 } = this.state;
-      // const networkId = await web3.eth.net.getId();
-      // await this.setState({ chainId, networkId });
-    })
+  }, [activatingConnector, connector])
 
-    const web3Provider = new providers.Web3Provider(provider)
-    const signer = web3Provider.getSigner()
-    const address = await signer.getAddress()
-    dispatch({
-      type: 'SET_WEB3_PROVIDER',
-      web3Provider,
-      address,
-    })
-  }, [resetApp])
+  // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
+  const triedEager = useEagerConnect()
 
-  useEffect(() => {
-    if (web3Modal.cachedProvider) {
-      onWeb3Connect()
-    }
-  }, [onWeb3Connect])
+  // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
+  useInactiveListener(!triedEager || !!activatingConnector)
 
   // request access to the user's MetaMask account
   async function requestAccount() {
@@ -173,12 +110,12 @@ export const Home = (): JSX.Element => {
 
   // call the smart contract, read the current greeting value
   async function fetchContractGreeting() {
-    if (state.web3Provider) {
+    if (library) {
       // const provider = new providers.Web3Provider(window.ethereum)
       const contract = new ethers.Contract(
         GREETER_ADDRESS,
         Greeter.abi,
-        state.web3Provider
+        library
       )
       try {
         const data = await contract.greet()
@@ -193,10 +130,10 @@ export const Home = (): JSX.Element => {
   // call the smart contract, send an update
   async function setContractGreeting() {
     if (!state.inputValue) return
-    if (state.web3Provider) {
+    if (library) {
       await requestAccount()
       // const provider = new providers.Web3Provider(window.ethereum)
-      const signer = state.web3Provider.getSigner()
+      const signer = library.getSigner()
       const contract = new ethers.Contract(GREETER_ADDRESS, Greeter.abi, signer)
       const transaction = await contract.setGreeting(state.inputValue)
       await transaction.wait()
@@ -206,7 +143,7 @@ export const Home = (): JSX.Element => {
 
   let blockieImageSrc
   if (typeof window !== 'undefined') {
-    blockieImageSrc = blockies.create({ seed: state.address }).toDataURL()
+    blockieImageSrc = blockies.create({ seed: account }).toDataURL()
   }
 
   return (
@@ -219,15 +156,34 @@ export const Home = (): JSX.Element => {
         <div className="container mx-auto">
           <div className="px-6 py-8">
             <div className="flex items-center">
-              {state.address ? (
+              {account ? (
                 <div className="ml-auto flex items-center">
                   <img src={blockieImageSrc} alt="blockie" />
-                  <p className="ml-4">{state.address}</p>
+                  <p className="mx-4">{account}</p>
+                  <Button
+                    onClick={() => {
+                      deactivate()
+                    }}
+                  >
+                    Disconnect
+                  </Button>
                 </div>
               ) : (
-                <Button onClick={onWeb3Connect}>Connect Wallet</Button>
+                <Button
+                  onClick={() => {
+                    setActivatingConnector(injected)
+                    activate(injected)
+                  }}
+                >
+                  Connect To MetaMask
+                </Button>
               )}
             </div>
+            {!!error && (
+              <h4 style={{ marginTop: '1rem', marginBottom: '0' }}>
+                {getErrorMessage(error)}
+              </h4>
+            )}
           </div>
         </div>
       </header>
@@ -258,7 +214,7 @@ export const Home = (): JSX.Element => {
               </div>
             </div>
             <hr className="my-8" />
-            <Signature web3Provider={state.web3Provider} />
+            <Signature web3Provider={library} />
             <hr className="my-8" />
             <TheGraphQuery />
           </div>

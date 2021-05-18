@@ -25,22 +25,24 @@
     ]
   },
   "dependencies": {
+    "@apollo/client": "3.1.1",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@walletconnect/web3-provider": "^1.4.1",
+    "@web3-react/core": "^6.1.9",
+    "@web3-react/injected-connector": "^6.0.7",
     "blockies-ts": "^1.0.0",
     "chai": "^4.3.4",
+    "deepmerge": "^4.2.2",
     "ethereum-waffle": "^3.3.0",
     "ethers": "^5.1.4",
+    "graphql": "^15.3.0",
     "hardhat": "^2.2.1",
+    "lodash": "4.17.20",
     "next": "latest",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "web3modal": "^1.9.3",
-    "@apollo/client": "3.1.1",
-    "deepmerge": "^4.2.2",
-    "lodash": "4.17.20",
-    "graphql": "^15.3.0"
+    "web3modal": "^1.9.3"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.3.2",
