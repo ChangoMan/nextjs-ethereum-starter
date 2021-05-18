@@ -1,12 +1,11 @@
+import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
 import { useState } from 'react'
 import Button from './Button'
 
-type SignatureProps = {
-  web3Provider: any
-}
+function Signature(): JSX.Element {
+  const { library } = useWeb3React()
 
-function Signature({ web3Provider }: SignatureProps): JSX.Element {
   const [signature, setSignature] = useState('')
   const [messageToSign, setMessageToSign] = useState('')
 
@@ -17,9 +16,11 @@ function Signature({ web3Provider }: SignatureProps): JSX.Element {
   const [verificationSuccess, setVerificationSuccess] = useState(false)
 
   const sign = async () => {
-    const signer = web3Provider.getSigner()
-    const newSignature = await signer.signMessage(messageToSign)
-    setSignature(newSignature)
+    if (library) {
+      const signer = library.getSigner()
+      const newSignature = await signer.signMessage(messageToSign)
+      setSignature(newSignature)
+    }
   }
 
   const verifySignature = () => {

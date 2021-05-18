@@ -170,6 +170,7 @@ export const Home = (): JSX.Element => {
                 </div>
               ) : (
                 <Button
+                  className="ml-auto"
                   onClick={() => {
                     setActivatingConnector(injected)
                     activate(injected)
@@ -214,7 +215,7 @@ export const Home = (): JSX.Element => {
               </div>
             </div>
             <hr className="my-8" />
-            <Signature web3Provider={library} />
+            <Signature />
             <hr className="my-8" />
             <TheGraphQuery />
           </div>
