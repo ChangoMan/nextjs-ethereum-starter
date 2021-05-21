@@ -13,6 +13,7 @@ Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-gu
 - Tailwind CSS
 - Hardhat
 - Ethers.js
+- [web3-react](https://github.com/NoahZinsmeister/web3-react)
 
 ## Getting Started
 
@@ -43,3 +44,5 @@ npm run dev
 ```
 
 This will start up the Next.js development server and your site will be available at http://localhost:3000/
+
+To interact with the local contract, be sure to switch your MetaMask Network to `Localhost 8545`
