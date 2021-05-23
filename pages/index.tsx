@@ -96,9 +96,7 @@ export const Home = (): JSX.Element => {
               Greeting Component
             </h2>
             <p className="mb-3 text-xl">Greeting: {state.greeting}</p>
-            <Button colorScheme="teal" onClick={fetchContractGreeting}>
-              Fetch Greeting
-            </Button>
+            <Button onClick={fetchContractGreeting}>Fetch Greeting</Button>
           </div>
           <div className="mt-12">
             <input
@@ -112,9 +110,7 @@ export const Home = (): JSX.Element => {
               }}
             />
             <div className="mt-3">
-              <Button colorScheme="teal" onClick={setContractGreeting}>
-                Set Greeting
-              </Button>
+              <Button onClick={setContractGreeting}>Set Greeting</Button>
             </div>
           </div>
         </div>
