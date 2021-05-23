@@ -6,14 +6,13 @@ My iteration of [Austin Griffith's scaffold-eth](https://github.com/austintgriff
 Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
 
 - [Typescript](https://www.typescriptlang.org/)
+- [Hardhat](https://hardhat.org/)
+- [Ethers.js](https://docs.ethers.io/v5/)
+- [web3-react](https://github.com/NoahZinsmeister/web3-react)
 - Linting with [ESLint](https://eslint.org/)
 - Formatting with [Prettier](https://prettier.io/)
 - Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks
 - Testing with [Jest](https://jestjs.io/) and [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro)
-- Tailwind CSS
-- Hardhat
-- Ethers.js
-- [web3-react](https://github.com/NoahZinsmeister/web3-react)
 
 ## Getting Started
 
