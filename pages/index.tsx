@@ -91,13 +91,8 @@ export const Home = (): JSX.Element => {
     <Layout>
       <div className="container mx-auto">
         <div className="px-6 py-8">
-          <div>
-            <h2 className="mt-12 mb-8 font-semibold text-lg">
-              Greeting Component
-            </h2>
-            <p className="mb-3 text-xl">Greeting: {state.greeting}</p>
-            <Button onClick={fetchContractGreeting}>Fetch Greeting</Button>
-          </div>
+          <p className="mb-3 text-xl">Greeting: {state.greeting}</p>
+          <Button onClick={fetchContractGreeting}>Fetch Greeting</Button>
           <div className="mt-12">
             <input
               type="text"

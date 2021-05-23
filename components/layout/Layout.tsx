@@ -80,7 +80,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
             {account ? (
               <div className="ml-auto flex items-center">
                 <img src={blockieImageSrc} alt="blockie" />
-                <p className="mx-4">{account}</p>
+                <p className="mx-4 mb-0">{account}</p>
                 <Button
                   onClick={() => {
                     deactivate()
