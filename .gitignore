@@ -1,19 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+**/node_modules
 /.pnp
 .pnp.js
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
 
 # misc
 .DS_Store
@@ -35,6 +25,19 @@ yarn-error.log*
 
 node_modules
 
-#Hardhat files
-cache
-artifacts
+## Hardhat files ##
+packages/hardhat/*.txt
+packages/hardhat/cache
+packages/hardhat/artifacts
+packages/hardhat/deployments
+
+## Frontend Files ##
+# testing
+packages/frontend/coverage
+# next.js
+packages/frontend/.next/
+packages/frontend/out/
+# production
+packages/frontend/build
+# contracts
+packages/frotnend/artifacts/*
