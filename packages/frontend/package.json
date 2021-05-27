@@ -26,8 +26,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.1.1",
-    "@web3-react/core": "^6.1.9",
-    "@web3-react/injected-connector": "^6.0.7",
+    "@usedapp/core": "^0.3.20",
     "blockies-ts": "^1.0.0",
     "deepmerge": "^4.2.2",
     "ethers": "^5.1.4",

@@ -1,10 +1,10 @@
-import { useWeb3React } from '@web3-react/core'
+import { useEthers } from '@usedapp/core'
 import { ethers } from 'ethers'
 import { useState } from 'react'
 import Button from './Button'
 
 function Signature(): JSX.Element {
-  const { library } = useWeb3React()
+  const { library } = useEthers()
 
   const [signature, setSignature] = useState('')
   const [messageToSign, setMessageToSign] = useState('')

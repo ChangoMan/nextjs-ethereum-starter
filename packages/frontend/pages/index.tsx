@@ -1,4 +1,4 @@
-import { useWeb3React } from '@web3-react/core'
+import { useEthers } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
 import Greeter from '../artifacts/contracts/Greeter.sol/Greeter.json'
@@ -51,7 +51,7 @@ const localProvider = new providers.StaticJsonRpcProvider(
 
 export const Home = (): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const { account, library } = useWeb3React()
+  const { account, library } = useEthers()
 
   // request access to the user's MetaMask account
   async function requestAccount() {
