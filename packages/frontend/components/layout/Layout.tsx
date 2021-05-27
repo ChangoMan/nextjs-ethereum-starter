@@ -1,8 +1,8 @@
+import { Button, Container, Flex, Image, Link, Text } from '@chakra-ui/react'
 import { useEthers } from '@usedapp/core'
 import blockies from 'blockies-ts'
 import React from 'react'
 import Balance from '../Balance'
-import Button from '../Button'
 import Head, { MetaProps } from './Head'
 
 // Extends `window` to add `ethereum`.
@@ -29,26 +29,33 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
     <>
       <Head customMeta={customMeta} />
       <header>
-        <div className="container mx-auto px-6">
-          <div className="py-8 flex items-center">
+        <Container maxW="container.xl">
+          <Flex
+            sx={{
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              py: 8,
+            }}
+          >
             {account ? (
-              <div className="ml-auto flex items-center">
+              <Flex sx={{ alignItems: 'center' }}>
                 <Balance />
-                <img className="ml-4" src={blockieImageSrc} alt="blockie" />
-                <p className="mx-4 mb-0">
+                <Image sx={{ ml: 4 }} src={blockieImageSrc} alt="blockie" />
+                <Text sx={{ mx: 4 }}>
                   {account.replace(account.substring(6, 38), '...')}
-                </p>
+                </Text>
                 <Button
+                  colorScheme="teal"
                   onClick={() => {
                     deactivate()
                   }}
                 >
                   Disconnect
                 </Button>
-              </div>
+              </Flex>
             ) : (
               <Button
-                className="ml-auto"
+                colorScheme="teal"
                 onClick={() => {
                   activateBrowserWallet()
                 }}
@@ -56,23 +63,18 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                 Connect To MetaMask
               </Button>
             )}
-          </div>
-          {error && <p>{error}</p>}
-        </div>
+          </Flex>
+          {error && <Text>{error}</Text>}
+        </Container>
       </header>
       <main>{children}</main>
       <footer>
-        <div className="container mx-auto px-6 py-8">
-          <p>
+        <Container sx={{ py: 8 }} maxW="container.xl">
+          <Text>
             Built by{' '}
-            <a
-              className="text-gray-900 dark:text-white"
-              href="https://twitter.com/huntarosan"
-            >
-              Hunter Chang
-            </a>
-          </p>
-        </div>
+            <Link href="https://twitter.com/huntarosan">Hunter Chang</Link>
+          </Text>
+        </Container>
       </footer>
     </>
   )

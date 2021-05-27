@@ -1,9 +1,9 @@
 import { ApolloProvider } from '@apollo/client'
+import { ChakraProvider } from '@chakra-ui/react'
 import { ChainId, Config, DAppProvider } from '@usedapp/core'
 import type { AppProps } from 'next/app'
 import React from 'react'
 import { useApollo } from '../lib/apolloClient'
-import '../styles/globals.css'
 
 const config: Config = {
   // readOnlyChainId: ChainId.Mainnet,
@@ -29,7 +29,9 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
     <ApolloProvider client={apolloClient}>
       <DAppProvider config={config}>
-        <Component {...pageProps} />
+        <ChakraProvider>
+          <Component {...pageProps} />
+        </ChakraProvider>
       </DAppProvider>
     </ApolloProvider>
   )

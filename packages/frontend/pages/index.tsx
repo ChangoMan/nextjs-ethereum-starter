@@ -1,8 +1,8 @@
+import { Box, Button, Container, Input, Text } from '@chakra-ui/react'
 import { useEthers } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
 import Greeter from '../artifacts/contracts/Greeter.sol/Greeter.json'
-import Button from '../components/Button'
 import Layout from '../components/layout/Layout'
 
 // Update with the contract address logged out to the CLI when it was deployed
@@ -110,12 +110,20 @@ export const Home = (): JSX.Element => {
 
   return (
     <Layout>
-      <div className="container mx-auto">
-        <div className="px-6 py-8">
-          <p className="mb-3 text-xl">Greeting: {state.greeting}</p>
-          <Button onClick={fetchContractGreeting}>Fetch Greeting</Button>
-          <div className="mt-12">
-            <input
+      <Container maxW="container.xl">
+        <Box maxW="container.sm">
+          <Box>
+            <Text>Greeting: {state.greeting}</Text>
+            <Button
+              sx={{ mt: 2 }}
+              colorScheme="teal"
+              onClick={fetchContractGreeting}
+            >
+              Fetch Greeting
+            </Button>
+          </Box>
+          <Box sx={{ mt: 8 }}>
+            <Input
               type="text"
               placeholder="Enter a Greeting"
               onChange={(e) => {
@@ -125,15 +133,19 @@ export const Home = (): JSX.Element => {
                 })
               }}
             />
-            <div className="mt-3">
-              <Button onClick={setContractGreeting}>Set Greeting</Button>
-            </div>
-            <div className="mt-3">
-              <Button onClick={sendFunds}>Send Funds</Button>
-            </div>
-          </div>
-        </div>
-      </div>
+            <Button
+              sx={{ mt: 2 }}
+              colorScheme="teal"
+              onClick={setContractGreeting}
+            >
+              Set Greeting
+            </Button>
+          </Box>
+          <Button sx={{ mt: 8 }} colorScheme="teal" onClick={sendFunds}>
+            Send Funds From Local Hardhat Chain
+          </Button>
+        </Box>
+      </Container>
     </Layout>
   )
 }
