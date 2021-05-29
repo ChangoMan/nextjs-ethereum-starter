@@ -1,5 +1,5 @@
-import { Box, Button, Container, Input, Text } from '@chakra-ui/react'
-import { useEthers } from '@usedapp/core'
+import { Box, Button, Heading, Input, Text } from '@chakra-ui/react'
+import { useEthers, useSendTransaction } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
 import Greeter from '../artifacts/contracts/Greeter.sol/Greeter.json'
@@ -49,9 +49,15 @@ const localProvider = new providers.StaticJsonRpcProvider(
   'http://localhost:8545'
 )
 
-export const Home = (): JSX.Element => {
+export const HomeIndex = (): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { account, library } = useEthers()
+  // const toast = useToast()
+
+  // Use the localProvider as the signer to send ETH to our wallet
+  const { sendTransaction } = useSendTransaction({
+    signer: localProvider.getSigner(),
+  })
 
   // request access to the user's MetaMask account
   async function requestAccount() {
@@ -91,63 +97,75 @@ export const Home = (): JSX.Element => {
     }
   }
 
-  async function sendFunds() {
-    if (account) {
-      const signer = localProvider.getSigner()
-      try {
-        const result = await signer.sendTransaction({
-          to: account,
-          value: utils.parseEther('0.01'),
-        })
-        // eslint-disable-next-line no-console
-        console.log(result)
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error)
-      }
-    }
+  function sendFunds() {
+    sendTransaction({
+      to: account,
+      value: utils.parseEther('0.1'),
+    })
   }
+
+  // This is only triggering on transaction sent, not triggering on
+  // block mined
+  // useEffect(() => {
+  //   console.log('TRANSACTION', transactionState)
+  //   if (transactionState.status === 'Success' && transactionState.receipt) {
+  //     const { receipt } = transactionState
+  //     toast({
+  //       title: 'Transaction Successful',
+  //       description: (
+  //         <>
+  //           <Text>Transaction Hash: {receipt.transactionHash}</Text>
+  //           <Text>
+  //             Gas Used: {utils.formatUnits(receipt.gasUsed, 'gwei')} Gwei
+  //           </Text>
+  //         </>
+  //       ),
+  //       status: 'success',
+  //     })
+  //   }
+  // }, [toast, transactionState])
 
   return (
     <Layout>
-      <Container maxW="container.xl">
-        <Box maxW="container.sm">
-          <Box>
-            <Text>Greeting: {state.greeting}</Text>
-            <Button
-              sx={{ mt: 2 }}
-              colorScheme="teal"
-              onClick={fetchContractGreeting}
-            >
-              Fetch Greeting
-            </Button>
-          </Box>
-          <Box sx={{ mt: 8 }}>
-            <Input
-              type="text"
-              placeholder="Enter a Greeting"
-              onChange={(e) => {
-                dispatch({
-                  type: 'SET_INPUT_VALUE',
-                  inputValue: e.target.value,
-                })
-              }}
-            />
-            <Button
-              sx={{ mt: 2 }}
-              colorScheme="teal"
-              onClick={setContractGreeting}
-            >
-              Set Greeting
-            </Button>
-          </Box>
-          <Button sx={{ mt: 8 }} colorScheme="teal" onClick={sendFunds}>
-            Send Funds From Local Hardhat Chain
+      <Heading as="h1" sx={{ mb: 8 }}>
+        Next.js Ethereum Starter
+      </Heading>
+      <Box maxW="container.sm">
+        <Box>
+          <Text>Greeting: {state.greeting}</Text>
+          <Button
+            sx={{ mt: 2 }}
+            colorScheme="teal"
+            onClick={fetchContractGreeting}
+          >
+            Fetch Greeting
           </Button>
         </Box>
-      </Container>
+        <Box sx={{ mt: 8 }}>
+          <Input
+            type="text"
+            placeholder="Enter a Greeting"
+            onChange={(e) => {
+              dispatch({
+                type: 'SET_INPUT_VALUE',
+                inputValue: e.target.value,
+              })
+            }}
+          />
+          <Button
+            sx={{ mt: 2 }}
+            colorScheme="teal"
+            onClick={setContractGreeting}
+          >
+            Set Greeting
+          </Button>
+        </Box>
+        <Button sx={{ mt: 8 }} colorScheme="teal" onClick={sendFunds}>
+          Send Funds From Local Hardhat Chain
+        </Button>
+      </Box>
     </Layout>
   )
 }
 
-export default Home
+export default HomeIndex
