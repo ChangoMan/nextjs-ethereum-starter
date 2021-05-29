@@ -16,30 +16,28 @@ Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-gu
 
 ## Getting Started
 
+This project uses Yarn Workspaces, so you'll need [Yarn](https://classic.yarnpkg.com/en/docs/install)
+
 ```bash
 git clone https://github.com/ChangoMan/scaffold-eth-nextjs.git
 cd scaffold-eth-nextjs
 
 yarn install
-# or
-npm install
 
 # Start up the Hardhat Network
-npx hardhat node
+yarn chain
 ```
 
-Here we just install the npm project's dependencies, and by running `npx hardhat node` we spin up an instance of Hardhat Network that you can connect to using MetaMask. In a different terminal in the same directory, run:
+Here we just install the npm project's dependencies, and by running `yarn chain` we spin up an instance of Hardhat Network that you can connect to using MetaMask. In a different terminal in the same directory, run:
 
 ```bash
-npx hardhat run scripts/deploy.js --network localhost
+yarn deploy
 ```
 
 This will deploy the contract to Hardhat Network. After this completes run:
 
 ```bash
 yarn dev
-# or
-npm run dev
 ```
 
 This will start up the Next.js development server and your site will be available at http://localhost:3000/
