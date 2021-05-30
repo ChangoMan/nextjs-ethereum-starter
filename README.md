@@ -8,7 +8,7 @@ Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-gu
 - [Typescript](https://www.typescriptlang.org/)
 - [Hardhat](https://hardhat.org/)
 - [Ethers.js](https://docs.ethers.io/v5/)
-- [web3-react](https://github.com/NoahZinsmeister/web3-react)
+- [useDApp](https://usedapp.io/)
 - Linting with [ESLint](https://eslint.org/)
 - Formatting with [Prettier](https://prettier.io/)
 - Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks
