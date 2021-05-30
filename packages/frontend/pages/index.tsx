@@ -130,7 +130,7 @@ export const HomeIndex = (): JSX.Element => {
       <Heading as="h1" sx={{ mb: 8 }}>
         Next.js Ethereum Starter
       </Heading>
-      <Box maxW="container.sm">
+      <Box sx={{ maxWidth: 'container.sm' }}>
         <Box>
           <Text>Greeting: {state.greeting}</Text>
           <Button

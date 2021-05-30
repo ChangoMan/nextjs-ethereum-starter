@@ -1,6 +1,8 @@
 import { Button, Container, Flex, Image, Link, Text } from '@chakra-ui/react'
-import { useEthers, useNotifications } from '@usedapp/core'
+// import { useEthers, useNotifications } from '@usedapp/core'
+import { useEthers } from '@usedapp/core'
 import blockies from 'blockies-ts'
+import NextLink from 'next/link'
 import React from 'react'
 import Balance from '../Balance'
 import Head, { MetaProps } from './Head'
@@ -19,7 +21,7 @@ type LayoutProps = {
 
 const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   const { account, activateBrowserWallet, deactivate, error } = useEthers()
-  const { notifications } = useNotifications()
+  // const { notifications } = useNotifications()
 
   // console.log('notifications', notifications)
 
@@ -36,10 +38,21 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
           <Flex
             sx={{
               alignItems: 'center',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
               py: 8,
             }}
           >
+            <Flex>
+              <NextLink href="/">
+                <Link sx={{ px: 4, py: 2 }}>Home</Link>
+              </NextLink>
+              <NextLink href="/graph-example">
+                <Link sx={{ px: 4, py: 2 }}>Graph Example</Link>
+              </NextLink>
+              <NextLink href="/signature-example">
+                <Link sx={{ px: 4, py: 2 }}>Signature Example</Link>
+              </NextLink>
+            </Flex>
             {account ? (
               <Flex sx={{ alignItems: 'center' }}>
                 <Balance />
@@ -72,7 +85,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
       </header>
       <main>
         <Container maxW="container.xl">
-          {notifications.map((notification) => {
+          {/* {notifications.map((notification) => {
             console.log('NOTIFICATION', notification)
             if (notification.type === 'walletConnected') {
               return null
@@ -82,7 +95,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                 <strong>{notification.type}</strong>
               </p>
             )
-          })}
+          })} */}
           {children}
         </Container>
       </main>

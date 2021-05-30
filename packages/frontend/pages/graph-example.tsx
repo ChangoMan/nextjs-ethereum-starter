@@ -18,8 +18,8 @@ function GraphExampleIndex(): JSX.Element {
 
   return (
     <Layout>
-      <Heading as="h1" sx={{ mb: 8 }}>
-        Graph Query Component
+      <Heading as="h1" sx={{ mb: 12 }}>
+        The Graph Query Page
       </Heading>
       {loading && (
         <Alert status="warning">
