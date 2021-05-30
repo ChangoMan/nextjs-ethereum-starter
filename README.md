@@ -14,6 +14,8 @@ Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-gu
 - Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks
 - Testing with [Jest](https://jestjs.io/) and [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro)
 
+👀 [View the Live Demo](https://nextjs-ethereum-starter.vercel.app/)
+
 ## Getting Started
 
 This project uses Yarn Workspaces, so you'll need [Yarn](https://classic.yarnpkg.com/en/docs/install)
