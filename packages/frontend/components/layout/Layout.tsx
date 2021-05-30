@@ -1,4 +1,13 @@
-import { Button, Container, Flex, Image, Link, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Image,
+  Link,
+  SimpleGrid,
+  Text,
+} from '@chakra-ui/react'
 // import { useEthers, useNotifications } from '@usedapp/core'
 import { useEthers } from '@usedapp/core'
 import blockies from 'blockies-ts'
@@ -20,9 +29,8 @@ type LayoutProps = {
 }
 
 const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
-  const { account, activateBrowserWallet, deactivate, error } = useEthers()
+  const { account, activateBrowserWallet, deactivate } = useEthers()
   // const { notifications } = useNotifications()
-
   // console.log('notifications', notifications)
 
   let blockieImageSrc
@@ -34,15 +42,16 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
     <>
       <Head customMeta={customMeta} />
       <header>
-        <Container maxW="container.xl">
-          <Flex
+        <Container sx={{ maxWidth: 'container.xl' }}>
+          <SimpleGrid
+            columns={[1, 1, 1, 2]}
             sx={{
               alignItems: 'center',
               justifyContent: 'space-between',
               py: 8,
             }}
           >
-            <Flex>
+            <Flex sx={{ py: [4, null, null, 0] }}>
               <NextLink href="/">
                 <Link sx={{ px: 4, py: 2 }}>Home</Link>
               </NextLink>
@@ -54,7 +63,13 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
               </NextLink>
             </Flex>
             {account ? (
-              <Flex sx={{ alignItems: 'center' }}>
+              <Flex
+                sx={{
+                  order: [-1, null, null, 2],
+                  alignItems: 'center',
+                  justifyContent: ['flex-start', null, null, 'flex-end'],
+                }}
+              >
                 <Balance />
                 <Image sx={{ ml: 4 }} src={blockieImageSrc} alt="blockie" />
                 <Text sx={{ mx: 4 }}>
@@ -70,21 +85,27 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                 </Button>
               </Flex>
             ) : (
-              <Button
-                colorScheme="teal"
-                onClick={() => {
-                  activateBrowserWallet()
+              <Box
+                sx={{
+                  order: [-1, null, null, 2],
+                  textAlign: ['left', null, null, 'right'],
                 }}
               >
-                Connect To MetaMask
-              </Button>
+                <Button
+                  colorScheme="teal"
+                  onClick={() => {
+                    activateBrowserWallet()
+                  }}
+                >
+                  Connect To MetaMask
+                </Button>
+              </Box>
             )}
-          </Flex>
-          {error && <Text>{error}</Text>}
+          </SimpleGrid>
         </Container>
       </header>
       <main>
-        <Container maxW="container.xl">
+        <Container sx={{ maxWidth: 'container.xl' }}>
           {/* {notifications.map((notification) => {
             console.log('NOTIFICATION', notification)
             if (notification.type === 'walletConnected') {
@@ -100,7 +121,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
         </Container>
       </main>
       <footer>
-        <Container sx={{ mt: 8, py: 8 }} maxW="container.xl">
+        <Container sx={{ mt: 8, py: 8, maxWidth: 'container.xl' }}>
           <Text>
             Built by{' '}
             <Link href="https://twitter.com/huntarosan">Hunter Chang</Link>
