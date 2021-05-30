@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Input, Text } from '@chakra-ui/react'
+import { Box, Button, Divider, Heading, Input, Text } from '@chakra-ui/react'
 import { useEthers, useSendTransaction } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
@@ -52,7 +52,6 @@ const localProvider = new providers.StaticJsonRpcProvider(
 export const HomeIndex = (): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { account, library } = useEthers()
-  // const toast = useToast()
 
   // Use the localProvider as the signer to send ETH to our wallet
   const { sendTransaction } = useSendTransaction({
@@ -67,7 +66,6 @@ export const HomeIndex = (): JSX.Element => {
   // call the smart contract, read the current greeting value
   async function fetchContractGreeting() {
     if (library) {
-      // const provider = new providers.Web3Provider(window.ethereum)
       const contract = new ethers.Contract(
         GREETER_ADDRESS,
         Greeter.abi,
@@ -88,7 +86,6 @@ export const HomeIndex = (): JSX.Element => {
     if (!state.inputValue) return
     if (library) {
       await requestAccount()
-      // const provider = new providers.Web3Provider(window.ethereum)
       const signer = library.getSigner()
       const contract = new ethers.Contract(GREETER_ADDRESS, Greeter.abi, signer)
       const transaction = await contract.setGreeting(state.inputValue)
@@ -103,27 +100,6 @@ export const HomeIndex = (): JSX.Element => {
       value: utils.parseEther('0.1'),
     })
   }
-
-  // This is only triggering on transaction sent, not triggering on
-  // block mined
-  // useEffect(() => {
-  //   console.log('TRANSACTION', transactionState)
-  //   if (transactionState.status === 'Success' && transactionState.receipt) {
-  //     const { receipt } = transactionState
-  //     toast({
-  //       title: 'Transaction Successful',
-  //       description: (
-  //         <>
-  //           <Text>Transaction Hash: {receipt.transactionHash}</Text>
-  //           <Text>
-  //             Gas Used: {utils.formatUnits(receipt.gasUsed, 'gwei')} Gwei
-  //           </Text>
-  //         </>
-  //       ),
-  //       status: 'success',
-  //     })
-  //   }
-  // }, [toast, transactionState])
 
   return (
     <Layout>
@@ -141,6 +117,7 @@ export const HomeIndex = (): JSX.Element => {
             Fetch Greeting
           </Button>
         </Box>
+        <Divider sx={{ my: 8 }} />
         <Box sx={{ mt: 8 }}>
           <Input
             type="text"
@@ -160,7 +137,8 @@ export const HomeIndex = (): JSX.Element => {
             Set Greeting
           </Button>
         </Box>
-        <Button sx={{ mt: 8 }} colorScheme="teal" onClick={sendFunds}>
+        <Divider sx={{ my: 8 }} />
+        <Button colorScheme="teal" onClick={sendFunds}>
           Send Funds From Local Hardhat Chain
         </Button>
       </Box>
