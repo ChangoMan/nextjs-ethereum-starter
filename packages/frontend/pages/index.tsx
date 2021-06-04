@@ -120,9 +120,16 @@ export const HomeIndex = (): JSX.Element => {
       <Heading as="h1" sx={{ mb: 8 }}>
         Next.js Ethereum Starter
       </Heading>
-      <Box sx={{ maxWidth: 'container.sm' }}>
+      <Text sx={{ fontSize: 'xl' }}>
+        This page only works locally with a Hardhat node running.
+      </Text>
+      <Box sx={{ maxWidth: 'container.sm', p: 8, mt: 8, bg: 'gray.100' }}>
+        <Text sx={{ fontSize: 'xl' }}>
+          Contract Address: {CONTRACT_ADDRESS}
+        </Text>
+        <Divider sx={{ my: 8 }} />
         <Box>
-          <Text>Greeting: {state.greeting}</Text>
+          <Text sx={{ fontSize: 'lg' }}>Greeting: {state.greeting}</Text>
           <Button
             sx={{ mt: 2 }}
             colorScheme="teal"
@@ -132,8 +139,9 @@ export const HomeIndex = (): JSX.Element => {
           </Button>
         </Box>
         <Divider sx={{ my: 8 }} />
-        <Box sx={{ mt: 8 }}>
+        <Box>
           <Input
+            sx={{ bg: 'white' }}
             type="text"
             placeholder="Enter a Greeting"
             onChange={(e) => {
