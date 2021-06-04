@@ -29,7 +29,7 @@
     "@chakra-ui/react": "^1.6.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@usedapp/core": "^0.3.20",
+    "@usedapp/core": "^0.3.24",
     "blockies-ts": "^1.0.0",
     "deepmerge": "^4.2.2",
     "ethers": "^5.1.4",

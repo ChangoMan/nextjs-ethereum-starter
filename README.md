@@ -1,4 +1,4 @@
-# scaffold-eth-nextjs
+# nextjs-ethereum-starter
 
 This is a work in progress!
 
@@ -9,6 +9,7 @@ Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-gu
 - [Hardhat](https://hardhat.org/)
 - [Ethers.js](https://docs.ethers.io/v5/)
 - [useDApp](https://usedapp.io/)
+- [Chakra UI](https://chakra-ui.com/)
 - Linting with [ESLint](https://eslint.org/)
 - Formatting with [Prettier](https://prettier.io/)
 - Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks

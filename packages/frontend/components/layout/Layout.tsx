@@ -1,4 +1,8 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Container,
@@ -8,8 +12,7 @@ import {
   SimpleGrid,
   Text,
 } from '@chakra-ui/react'
-// import { useEthers, useNotifications } from '@usedapp/core'
-import { useEthers } from '@usedapp/core'
+import { useEthers, useNotifications } from '@usedapp/core'
 import blockies from 'blockies-ts'
 import NextLink from 'next/link'
 import React from 'react'
@@ -23,15 +26,35 @@ declare global {
   }
 }
 
-type LayoutProps = {
+/**
+ * Constants & Helpers
+ */
+
+// Title text for the various transaction notifications.
+const TRANSACTION_TITLES = {
+  transactionStarted: 'Local Transaction Started',
+  transactionSucceed: 'Local Transaction Completed',
+}
+
+// Takes a long hash string and truncates it.
+function truncateHash(hash: string, length = 38): string {
+  return hash.replace(hash.substring(6, length), '...')
+}
+
+/**
+ * Prop Types
+ */
+interface LayoutProps {
   children: React.ReactNode
   customMeta?: MetaProps
 }
 
+/**
+ * Component
+ */
 const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   const { account, activateBrowserWallet, deactivate } = useEthers()
-  // const { notifications } = useNotifications()
-  // console.log('notifications', notifications)
+  const { notifications } = useNotifications()
 
   let blockieImageSrc
   if (typeof window !== 'undefined') {
@@ -72,9 +95,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
               >
                 <Balance />
                 <Image sx={{ ml: 4 }} src={blockieImageSrc} alt="blockie" />
-                <Text sx={{ mx: 4 }}>
-                  {account.replace(account.substring(6, 38), '...')}
-                </Text>
+                <Text sx={{ mx: 4 }}>{truncateHash(account)}</Text>
                 <Button
                   colorScheme="teal"
                   onClick={() => {
@@ -106,18 +127,30 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
       </header>
       <main>
         <Container sx={{ maxWidth: 'container.xl' }}>
-          {/* {notifications.map((notification) => {
-            console.log('NOTIFICATION', notification)
+          {children}
+          {notifications.map((notification) => {
             if (notification.type === 'walletConnected') {
               return null
             }
             return (
-              <p key={notification.id}>
-                <strong>{notification.type}</strong>
-              </p>
+              <Alert
+                key={notification.id}
+                status="success"
+                sx={{ position: 'fixed', bottom: 8, right: 8, width: '400px' }}
+              >
+                <AlertIcon />
+                <Box>
+                  <AlertTitle>
+                    {TRANSACTION_TITLES[notification.type]}
+                  </AlertTitle>
+                  <AlertDescription sx={{ overflow: 'hidden' }}>
+                    Transaction Hash:{' '}
+                    {truncateHash(notification.transaction.hash, 61)}
+                  </AlertDescription>
+                </Box>
+              </Alert>
             )
-          })} */}
-          {children}
+          })}
         </Container>
       </main>
       <footer>

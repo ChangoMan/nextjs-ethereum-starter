@@ -3,6 +3,9 @@ import { useEthers } from '@usedapp/core'
 import { utils } from 'ethers'
 import { useEffect, useState } from 'react'
 
+/**
+ * Component
+ */
 function Balance(): JSX.Element {
   const { account, library } = useEthers()
   const [balance, setBalance] = useState('')

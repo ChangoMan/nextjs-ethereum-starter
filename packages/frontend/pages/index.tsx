@@ -2,12 +2,23 @@ import { Box, Button, Divider, Heading, Input, Text } from '@chakra-ui/react'
 import { useEthers, useSendTransaction } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
-import Greeter from '../artifacts/contracts/Greeter.sol/Greeter.json'
+import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
 import Layout from '../components/layout/Layout'
 
-// Update with the contract address logged out to the CLI when it was deployed
-const GREETER_ADDRESS = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+/**
+ * Constants & Helpers
+ */
 
+// Update with the contract address logged out to the CLI when it was deployed
+const CONTRACT_ADDRESS = '0x9A676e781A523b5d0C0e43731313A708CB607508'
+
+const localProvider = new providers.StaticJsonRpcProvider(
+  'http://localhost:8545'
+)
+
+/**
+ * Prop Types
+ */
 type StateType = {
   greeting: string
   inputValue: string
@@ -22,6 +33,9 @@ type ActionType =
       inputValue: string
     }
 
+/**
+ * Component
+ */
 const initialState: StateType = {
   greeting: '',
   inputValue: '',
@@ -45,10 +59,6 @@ function reducer(state: StateType, action: ActionType): StateType {
   }
 }
 
-const localProvider = new providers.StaticJsonRpcProvider(
-  'http://localhost:8545'
-)
-
 export const HomeIndex = (): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { account, library } = useEthers()
@@ -67,8 +77,8 @@ export const HomeIndex = (): JSX.Element => {
   async function fetchContractGreeting() {
     if (library) {
       const contract = new ethers.Contract(
-        GREETER_ADDRESS,
-        Greeter.abi,
+        CONTRACT_ADDRESS,
+        YourContract.abi,
         library
       )
       try {
@@ -87,7 +97,11 @@ export const HomeIndex = (): JSX.Element => {
     if (library) {
       await requestAccount()
       const signer = library.getSigner()
-      const contract = new ethers.Contract(GREETER_ADDRESS, Greeter.abi, signer)
+      const contract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        YourContract.abi,
+        signer
+      )
       const transaction = await contract.setGreeting(state.inputValue)
       await transaction.wait()
       fetchContractGreeting()

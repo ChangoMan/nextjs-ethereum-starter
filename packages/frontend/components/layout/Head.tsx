@@ -2,15 +2,24 @@ import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-export type MetaProps = {
+/**
+ * Constants & Helpers
+ */
+export const WEBSITE_HOST_URL = 'https://nextjs-ethereum-starter.vercel.app/'
+
+/**
+ * Prop Types
+ */
+export interface MetaProps {
   description?: string
   image?: string
   title: string
   type?: string
 }
 
-export const WEBSITE_HOST_URL = 'https://nextjs-typescript-mdx-blog.vercel.app'
-
+/**
+ * Component
+ */
 const Head = ({ customMeta }: { customMeta?: MetaProps }): JSX.Element => {
   const router = useRouter()
   const meta: MetaProps = {
