@@ -15,11 +15,21 @@ async function main() {
 
   // We get the contract to deploy
   const YourContract = await hre.ethers.getContractFactory('YourContract');
-  const yourcontract = await YourContract.deploy('Hello, Hardhat!');
+  const contract = await YourContract.deploy('Hello, Hardhat!');
+  await contract.deployed();
 
-  await yourcontract.deployed();
+  saveFrontendFiles(contract);
 
-  console.log('YourContract deployed to:', yourcontract.address);
+  console.log('YourContract deployed to:', contract.address);
+}
+
+// https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/scripts/deploy.js
+function saveFrontendFiles(contract) {
+  const fs = require('fs');
+  fs.writeFileSync(
+    `${hre.config.paths.artifacts}/contracts/contractAddress.ts`,
+    `export const CONTRACT_ADDRESS = '${contract.address}'`
+  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere

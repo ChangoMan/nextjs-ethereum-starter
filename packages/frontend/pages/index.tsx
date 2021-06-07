@@ -2,15 +2,13 @@ import { Box, Button, Divider, Heading, Input, Text } from '@chakra-ui/react'
 import { useEthers, useSendTransaction } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
+import { CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
 import Layout from '../components/layout/Layout'
 
 /**
  * Constants & Helpers
  */
-
-// Update with the contract address logged out to the CLI when it was deployed
-const CONTRACT_ADDRESS = '0x9A676e781A523b5d0C0e43731313A708CB607508'
 
 const localProvider = new providers.StaticJsonRpcProvider(
   'http://localhost:8545'
@@ -127,7 +125,7 @@ export const HomeIndex = (): JSX.Element => {
         <Text sx={{ fontSize: 'xl' }}>
           Contract Address: {CONTRACT_ADDRESS}
         </Text>
-        <Divider sx={{ my: 8 }} />
+        <Divider sx={{ my: 8, borderColor: 'gray.400' }} />
         <Box>
           <Text sx={{ fontSize: 'lg' }}>Greeting: {state.greeting}</Text>
           <Button
@@ -138,7 +136,7 @@ export const HomeIndex = (): JSX.Element => {
             Fetch Greeting
           </Button>
         </Box>
-        <Divider sx={{ my: 8 }} />
+        <Divider sx={{ my: 8, borderColor: 'gray.400' }} />
         <Box>
           <Input
             sx={{ bg: 'white' }}
@@ -159,7 +157,7 @@ export const HomeIndex = (): JSX.Element => {
             Set Greeting
           </Button>
         </Box>
-        <Divider sx={{ my: 8 }} />
+        <Divider sx={{ my: 8, borderColor: 'gray.400' }} />
         <Button colorScheme="teal" onClick={sendFunds}>
           Send Funds From Local Hardhat Chain
         </Button>

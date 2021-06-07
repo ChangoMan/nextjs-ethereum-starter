@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react'
-import { useEthers } from '@usedapp/core'
+import { useEthers, useNotifications } from '@usedapp/core'
 import { utils } from 'ethers'
 import { useEffect, useState } from 'react'
 
@@ -8,18 +8,20 @@ import { useEffect, useState } from 'react'
  */
 function Balance(): JSX.Element {
   const { account, library } = useEthers()
+  const { notifications } = useNotifications()
+
   const [balance, setBalance] = useState('')
 
   useEffect(() => {
     async function getBalance() {
-      if (library && account) {
-        const signer = library.getSigner()
-        const signerBalance = await signer.getBalance()
-        setBalance(utils.formatEther(signerBalance))
-      }
+      const signer = library.getSigner()
+      const signerBalance = await signer.getBalance()
+      setBalance(utils.formatEther(signerBalance))
     }
-    getBalance()
-  }, [library, account])
+    if (library && account) {
+      getBalance()
+    }
+  }, [library, account, notifications])
 
   return <Text>{balance} ETH</Text>
 }
