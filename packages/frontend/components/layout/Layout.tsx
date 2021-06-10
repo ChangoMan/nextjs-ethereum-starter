@@ -75,14 +75,14 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
             }}
           >
             <Flex sx={{ py: [4, null, null, 0] }}>
-              <NextLink href="/">
-                <Link sx={{ px: 4, py: 2 }}>Home</Link>
+              <NextLink href="/" passHref>
+                <Link sx={{ px: 4, py: 1 }}>Home</Link>
               </NextLink>
-              <NextLink href="/graph-example">
-                <Link sx={{ px: 4, py: 2 }}>Graph Example</Link>
+              <NextLink href="/graph-example" passHref>
+                <Link sx={{ px: 4, py: 1 }}>Graph Example</Link>
               </NextLink>
-              <NextLink href="/signature-example">
-                <Link sx={{ px: 4, py: 2 }}>Signature Example</Link>
+              <NextLink href="/signature-example" passHref>
+                <Link sx={{ px: 4, py: 1 }}>Signature Example</Link>
               </NextLink>
             </Flex>
             {account ? (

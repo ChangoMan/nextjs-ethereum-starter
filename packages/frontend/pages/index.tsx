@@ -57,7 +57,7 @@ function reducer(state: StateType, action: ActionType): StateType {
   }
 }
 
-export const HomeIndex = (): JSX.Element => {
+function HomeIndex(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { account, library } = useEthers()
 
