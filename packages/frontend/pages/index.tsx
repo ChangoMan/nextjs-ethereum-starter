@@ -80,7 +80,7 @@ export const HomeIndex = (): JSX.Element => {
         library
       )
       try {
-        const data = await contract.greet()
+        const data = await contract.greeting()
         dispatch({ type: 'SET_GREETING', greeting: data })
       } catch (err) {
         // eslint-disable-next-line no-console

@@ -7,7 +7,8 @@
     "build": "yarn workspace nextjs-ethereum-starter-frontend build",
     "start": "yarn workspace nextjs-ethereum-starter-frontend start",
     "chain": "yarn workspace nextjs-ethereum-starter-hardhat chain",
-    "deploy": "yarn workspace nextjs-ethereum-starter-hardhat deploy"
+    "deploy": "yarn workspace nextjs-ethereum-starter-hardhat deploy",
+    "compile": "yarn workspace nextjs-ethereum-starter-hardhat compile"
   },
   "workspaces": {
     "packages": [
