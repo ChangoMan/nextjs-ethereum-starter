@@ -30,6 +30,9 @@ const config: HardhatUserConfig = {
       chainId: 1337,
     },
   },
+  typechain: {
+    outDir: '../frontend/types/typechain',
+  },
 };
 
 export default config;

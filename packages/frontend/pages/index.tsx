@@ -5,6 +5,7 @@ import React, { useReducer } from 'react'
 import { CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
 import Layout from '../components/layout/Layout'
+import { YourContract as YourContractType } from '../types/typechain'
 
 /**
  * Constants & Helpers
@@ -78,7 +79,7 @@ function HomeIndex(): JSX.Element {
         CONTRACT_ADDRESS,
         YourContract.abi,
         library
-      )
+      ) as YourContractType
       try {
         const data = await contract.greeting()
         dispatch({ type: 'SET_GREETING', greeting: data })
@@ -99,7 +100,7 @@ function HomeIndex(): JSX.Element {
         CONTRACT_ADDRESS,
         YourContract.abi,
         signer
-      )
+      ) as YourContractType
       const transaction = await contract.setGreeting(state.inputValue)
       await transaction.wait()
       fetchContractGreeting()
