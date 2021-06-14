@@ -30,6 +30,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@usedapp/core": "^0.3.24",
+    "@web3-react/walletconnect-connector": "^6.2.0",
     "blockies-ts": "^1.0.0",
     "deepmerge": "^4.2.2",
     "ethers": "^5.1.4",

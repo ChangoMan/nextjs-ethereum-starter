@@ -9,13 +9,21 @@ import {
   Flex,
   Image,
   Link,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   SimpleGrid,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { useEthers, useNotifications } from '@usedapp/core'
 import blockies from 'blockies-ts'
 import NextLink from 'next/link'
 import React from 'react'
+import { walletconnect } from '../../lib/connectors'
 import Balance from '../Balance'
 import Head, { MetaProps } from './Head'
 
@@ -53,8 +61,10 @@ interface LayoutProps {
  * Component
  */
 const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
-  const { account, activateBrowserWallet, deactivate } = useEthers()
+  const { account, activate, activateBrowserWallet, deactivate } = useEthers()
   const { notifications } = useNotifications()
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   let blockieImageSrc
   if (typeof window !== 'undefined') {
@@ -98,6 +108,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                 <Text sx={{ mx: 4 }}>{truncateHash(account)}</Text>
                 <Button
                   colorScheme="teal"
+                  variant="outline"
                   onClick={() => {
                     deactivate()
                   }}
@@ -112,18 +123,64 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                   textAlign: ['left', null, null, 'right'],
                 }}
               >
-                <Button
-                  colorScheme="teal"
-                  onClick={() => {
-                    activateBrowserWallet()
-                  }}
-                >
-                  Connect To MetaMask
+                <Button colorScheme="teal" variant="outline" onClick={onOpen}>
+                  Connect to a wallet
                 </Button>
               </Box>
             )}
           </SimpleGrid>
         </Container>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Connect to a wallet</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Button
+                sx={{
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  mb: 4,
+                }}
+                size="lg"
+                variant="outline"
+                rightIcon={
+                  <Image
+                    sx={{ maxWidth: '20px' }}
+                    src="/images/logo-metamask.png"
+                    alt="MetaMask"
+                  />
+                }
+                onClick={() => {
+                  activateBrowserWallet()
+                }}
+              >
+                MetaMask
+              </Button>
+              <Button
+                sx={{
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  mb: 4,
+                }}
+                size="lg"
+                variant="outline"
+                rightIcon={
+                  <Image
+                    sx={{ maxWidth: '20px' }}
+                    src="/images/logo-walletconnect.svg"
+                    alt="WalletConnect"
+                  />
+                }
+                onClick={() => {
+                  activate(walletconnect)
+                }}
+              >
+                WalletConnect
+              </Button>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
       </header>
       <main>
         <Container sx={{ maxWidth: 'container.xl' }}>
