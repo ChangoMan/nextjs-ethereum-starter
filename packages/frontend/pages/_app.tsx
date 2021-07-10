@@ -4,6 +4,7 @@ import { ChainId, Config, DAppProvider } from '@usedapp/core'
 import type { AppProps } from 'next/app'
 import React from 'react'
 import { useApollo } from '../lib/apolloClient'
+import { MulticallContract } from '../artifacts/contracts/contractAddress';
 
 const config: Config = {
   // readOnlyChainId: ChainId.Mainnet,
@@ -22,6 +23,10 @@ const config: Config = {
     ChainId.Localhost,
     ChainId.Hardhat,
   ],
+  multicallAddresses: {
+    [ChainId.Hardhat]: MulticallContract,
+    [ChainId.Localhost]: MulticallContract,
+  }
 }
 
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
