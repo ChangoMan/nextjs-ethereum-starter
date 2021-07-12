@@ -1,8 +1,8 @@
 import { Box, Button, Divider, Heading, Input, Text } from '@chakra-ui/react'
-import { useEthers, useSendTransaction } from '@usedapp/core'
+import { ChainId, useEthers, useSendTransaction } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
-import { YourContract as CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
+import { YourContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
 import Layout from '../components/layout/Layout'
 import { YourContract as YourContractType } from '../types/typechain'
@@ -14,6 +14,8 @@ import { YourContract as YourContractType } from '../types/typechain'
 const localProvider = new providers.StaticJsonRpcProvider(
   'http://localhost:8545'
 )
+
+const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
 
 /**
  * Prop Types
@@ -60,7 +62,15 @@ function reducer(state: StateType, action: ActionType): StateType {
 
 function HomeIndex(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const { account, library } = useEthers()
+  const { account, chainId, library } = useEthers()
+
+  const isLocalChain =
+    chainId === ChainId.Localhost || chainId === ChainId.Hardhat
+
+  const CONTRACT_ADDRESS =
+    chainId === ChainId.Ropsten
+      ? ROPSTEN_CONTRACT_ADDRESS
+      : LOCAL_CONTRACT_ADDRESS
 
   // Use the localProvider as the signer to send ETH to our wallet
   const { sendTransaction } = useSendTransaction({
@@ -107,7 +117,7 @@ function HomeIndex(): JSX.Element {
     }
   }
 
-  function sendFunds() {
+  function sendFunds(): void {
     sendTransaction({
       to: account,
       value: utils.parseEther('0.1'),
@@ -116,31 +126,35 @@ function HomeIndex(): JSX.Element {
 
   return (
     <Layout>
-      <Heading as="h1" sx={{ mb: 8 }}>
+      <Heading as="h1" mb="8">
         Next.js Ethereum Starter
       </Heading>
-      <Text sx={{ fontSize: 'xl' }}>
-        This page only works locally with a Hardhat node running.
+      <Button
+        as="a"
+        size="lg"
+        colorScheme="teal"
+        href="https://github.com/ChangoMan/nextjs-ethereum-starter"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Get the source code!
+      </Button>
+      <Text mt="8" fontSize="xl">
+        This page only works on the ROPSTEN Testnet or on a Local Chain.
       </Text>
-      <Box sx={{ maxWidth: 'container.sm', p: 8, mt: 8, bg: 'gray.100' }}>
-        <Text sx={{ fontSize: 'xl' }}>
-          Contract Address: {CONTRACT_ADDRESS}
-        </Text>
-        <Divider sx={{ my: 8, borderColor: 'gray.400' }} />
+      <Box maxWidth="container.sm" p="8" mt="8" bg="gray.100">
+        <Text fontSize="xl">Contract Address: {CONTRACT_ADDRESS}</Text>
+        <Divider my="8" borderColor="gray.400" />
         <Box>
-          <Text sx={{ fontSize: 'lg' }}>Greeting: {state.greeting}</Text>
-          <Button
-            sx={{ mt: 2 }}
-            colorScheme="teal"
-            onClick={fetchContractGreeting}
-          >
+          <Text fontSize="lg">Greeting: {state.greeting}</Text>
+          <Button mt="2" colorScheme="teal" onClick={fetchContractGreeting}>
             Fetch Greeting
           </Button>
         </Box>
-        <Divider sx={{ my: 8, borderColor: 'gray.400' }} />
+        <Divider my="8" borderColor="gray.400" />
         <Box>
           <Input
-            sx={{ bg: 'white' }}
+            bg="white"
             type="text"
             placeholder="Enter a Greeting"
             onChange={(e) => {
@@ -150,16 +164,17 @@ function HomeIndex(): JSX.Element {
               })
             }}
           />
-          <Button
-            sx={{ mt: 2 }}
-            colorScheme="teal"
-            onClick={setContractGreeting}
-          >
+          <Button mt="2" colorScheme="teal" onClick={setContractGreeting}>
             Set Greeting
           </Button>
         </Box>
-        <Divider sx={{ my: 8, borderColor: 'gray.400' }} />
-        <Button colorScheme="teal" onClick={sendFunds}>
+        <Divider my="8" borderColor="gray.400" />
+        <Text mb="4">This button only works on a Local Chain.</Text>
+        <Button
+          colorScheme="teal"
+          onClick={sendFunds}
+          isDisabled={!isLocalChain}
+        >
           Send Funds From Local Hardhat Chain
         </Button>
       </Box>

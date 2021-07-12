@@ -1,18 +1,25 @@
 import { ApolloProvider } from '@apollo/client'
 import { ChakraProvider } from '@chakra-ui/react'
-import { ChainId, Config, DAppProvider } from '@usedapp/core'
+import {
+  ChainId,
+  Config,
+  DAppProvider,
+  MULTICALL_ADDRESSES,
+} from '@usedapp/core'
 import type { AppProps } from 'next/app'
 import React from 'react'
+import { MulticallContract } from '../artifacts/contracts/contractAddress'
 import { useApollo } from '../lib/apolloClient'
-import { MulticallContract } from '../artifacts/contracts/contractAddress';
+
+// scaffold-eth's INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
+export const INFURA_ID = '460f40a260564ac4a4f4b3fffb032dad'
 
 const config: Config = {
-  // readOnlyChainId: ChainId.Mainnet,
-  // readOnlyUrls: {
-  //   [ChainId.Mainnet]:
-  //     'https://mainnet.infura.io/v3/62687d1a985d4508b2b7a24827551934',
-  // },
-  // readOnlyChainId: ChainId.Localhost,
+  readOnlyUrls: {
+    [ChainId.Ropsten]: `https://ropsten.infura.io/v3/${INFURA_ID}`,
+    [ChainId.Hardhat]: 'http://localhost:8545',
+    [ChainId.Localhost]: 'http://localhost:8545',
+  },
   supportedChains: [
     ChainId.Mainnet,
     ChainId.Goerli,
@@ -24,9 +31,10 @@ const config: Config = {
     ChainId.Hardhat,
   ],
   multicallAddresses: {
+    ...MULTICALL_ADDRESSES,
     [ChainId.Hardhat]: MulticallContract,
     [ChainId.Localhost]: MulticallContract,
-  }
+  },
 }
 
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {

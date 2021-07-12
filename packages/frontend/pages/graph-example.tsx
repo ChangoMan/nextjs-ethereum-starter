@@ -18,7 +18,7 @@ function GraphExampleIndex(): JSX.Element {
 
   return (
     <Layout>
-      <Heading as="h1" sx={{ mb: 12 }}>
+      <Heading as="h1" mb="12">
         The Graph Query Page
       </Heading>
       {loading && (
@@ -37,7 +37,7 @@ function GraphExampleIndex(): JSX.Element {
         !error &&
         data.markets.map(
           ({ id, underlyingName, underlyingSymbol, underlyingPriceUSD }) => (
-            <Box key={id} sx={{ mt: 8 }}>
+            <Box key={id} mt="8">
               <Text>Name: {underlyingName}</Text>
               <Text>Symbol: {underlyingSymbol}</Text>
               <Text>Price: ${underlyingPriceUSD}</Text>

@@ -9,6 +9,10 @@ import {
   Flex,
   Image,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   SimpleGrid,
   Text,
 } from '@chakra-ui/react'
@@ -66,46 +70,52 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
     <>
       <Head customMeta={customMeta} />
       <header>
-        <Container sx={{ maxWidth: 'container.xl' }}>
+        <Container maxWidth="container.xl">
           <SimpleGrid
             columns={[1, 1, 1, 2]}
-            sx={{
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              py: 8,
-            }}
+            alignItems="center"
+            justifyContent="space-between"
+            py="8"
           >
-            <Flex sx={{ py: [4, null, null, 0] }}>
+            <Flex py={[4, null, null, 0]}>
               <NextLink href="/" passHref>
-                <Link sx={{ px: 4, py: 1 }}>Home</Link>
+                <Link px="4" py="1">
+                  Home
+                </Link>
               </NextLink>
               <NextLink href="/graph-example" passHref>
-                <Link sx={{ px: 4, py: 1 }}>Graph Example</Link>
+                <Link px="4" py="1">
+                  Graph Example
+                </Link>
               </NextLink>
               <NextLink href="/signature-example" passHref>
-                <Link sx={{ px: 4, py: 1 }}>Signature Example</Link>
+                <Link px="4" py="1">
+                  Signature Example
+                </Link>
               </NextLink>
             </Flex>
             {account ? (
               <Flex
-                sx={{
-                  order: [-1, null, null, 2],
-                  alignItems: 'center',
-                  justifyContent: ['flex-start', null, null, 'flex-end'],
-                }}
+                order={[-1, null, null, 2]}
+                alignItems={'center'}
+                justifyContent={['flex-start', null, null, 'flex-end']}
               >
                 <Balance />
-                <Image sx={{ ml: 4 }} src={blockieImageSrc} alt="blockie" />
-                <Text sx={{ mx: 4 }}>{truncateHash(account)}</Text>
-                <Button
-                  colorScheme="teal"
-                  variant="outline"
-                  onClick={() => {
-                    deactivate()
-                  }}
-                >
-                  Disconnect
-                </Button>
+                <Image ml="4" src={blockieImageSrc} alt="blockie" />
+                <Menu placement="bottom-end">
+                  <MenuButton as={Button} ml="4">
+                    {truncateHash(account)}
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => {
+                        deactivate()
+                      }}
+                    >
+                      Disconnect
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
               </Flex>
             ) : (
               <ConnectWallet />
@@ -114,7 +124,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
         </Container>
       </header>
       <main>
-        <Container sx={{ maxWidth: 'container.xl' }}>
+        <Container maxWidth="container.xl">
           {children}
           {notifications.map((notification) => {
             if (notification.type === 'walletConnected') {
@@ -124,14 +134,17 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
               <Alert
                 key={notification.id}
                 status="success"
-                sx={{ position: 'fixed', bottom: 8, right: 8, width: '400px' }}
+                position="fixed"
+                bottom="8"
+                right="8"
+                width="400px"
               >
                 <AlertIcon />
                 <Box>
                   <AlertTitle>
                     {TRANSACTION_TITLES[notification.type]}
                   </AlertTitle>
-                  <AlertDescription sx={{ overflow: 'hidden' }}>
+                  <AlertDescription overflow="hidden">
                     Transaction Hash:{' '}
                     {truncateHash(notification.transaction.hash, 61)}
                   </AlertDescription>
@@ -142,7 +155,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
         </Container>
       </main>
       <footer>
-        <Container sx={{ mt: 8, py: 8, maxWidth: 'container.xl' }}>
+        <Container mt="8" py="8" maxWidth="container.xl">
           <Text>
             Built by{' '}
             <Link href="https://twitter.com/huntarosan">Hunter Chang</Link>

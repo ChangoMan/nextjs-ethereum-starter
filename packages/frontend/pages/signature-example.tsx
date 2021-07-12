@@ -146,15 +146,13 @@ function SignatureExampleIndex(): JSX.Element {
 
   return (
     <Layout>
-      <Heading as="h1" sx={{ mb: 12 }}>
+      <Heading as="h1" mb="12">
         Signature Demo Page
       </Heading>
-      <Box sx={{ maxWidth: 'container.sm' }}>
-        <Text sx={{ fontWeight: 'semibold' }}>
-          Use your MetaMask to sign a message.
-        </Text>
+      <Box maxWidth="container.sm">
+        <Text fontWeight="semibold">Use your MetaMask to sign a message.</Text>
         <Input
-          sx={{ mt: 6 }}
+          mt="6"
           type="text"
           placeholder="Enter Message"
           onChange={(e) => {
@@ -164,19 +162,19 @@ function SignatureExampleIndex(): JSX.Element {
             })
           }}
         />
-        <Button sx={{ mt: 2 }} colorScheme="teal" onClick={sign}>
+        <Button mt="2" colorScheme="teal" onClick={sign}>
           Sign
         </Button>
       </Box>
-      <Text sx={{ mt: 8 }}>This is the signature: {signature}</Text>
-      <Divider sx={{ my: 8 }} />
-      <Box sx={{ maxWidth: 'container.sm' }}>
-        <Text sx={{ fontWeight: 'semibold' }}>
+      <Text mt="8">This is the signature: {signature}</Text>
+      <Divider my="8" />
+      <Box maxWidth="container.sm">
+        <Text fontWeight="semibold">
           Enter an Address, Signature, and Message to verify the Message.
         </Text>
-        <Text sx={{ mt: 6 }}>Address:</Text>
+        <Text mt="6">Address:</Text>
         <Input
-          sx={{ mt: 2 }}
+          mt="2"
           type="text"
           placeholder="Enter Address To Verify"
           onChange={(e) => {
@@ -186,9 +184,9 @@ function SignatureExampleIndex(): JSX.Element {
             })
           }}
         />
-        <Text sx={{ mt: 6 }}>Signature:</Text>
+        <Text mt="6">Signature:</Text>
         <Input
-          sx={{ mt: 2 }}
+          mt="2"
           type="text"
           placeholder="Enter Signature To Verify"
           onChange={(e) => {
@@ -198,9 +196,9 @@ function SignatureExampleIndex(): JSX.Element {
             })
           }}
         />
-        <Text sx={{ mt: 4 }}>Message:</Text>
+        <Text mt="4">Message:</Text>
         <Input
-          sx={{ mt: 2 }}
+          mt="2"
           type="text"
           placeholder="Enter Message To Verify"
           onChange={(e) => {
@@ -210,16 +208,16 @@ function SignatureExampleIndex(): JSX.Element {
             })
           }}
         />
-        <Button sx={{ mt: 2 }} colorScheme="teal" onClick={verifySignature}>
+        <Button mt="2" colorScheme="teal" onClick={verifySignature}>
           Verify
         </Button>
         {verificationSuccess ? (
-          <Alert sx={{ mt: 4 }} status="success">
+          <Alert mt="4" status="success">
             <AlertIcon />
             Verified!
           </Alert>
         ) : (
-          <Alert sx={{ mt: 4 }} status="info">
+          <Alert mt="4" status="info">
             <AlertIcon />
             Not Verified!
           </Alert>

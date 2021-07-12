@@ -22,10 +22,8 @@ function ConnectWallet(): JSX.Element {
   return (
     <>
       <Box
-        sx={{
-          order: [-1, null, null, 2],
-          textAlign: ['left', null, null, 'right'],
-        }}
+        order={[-1, null, null, 2]}
+        textAlign={['left', null, null, 'right']}
       >
         <Button colorScheme="teal" variant="outline" onClick={onOpen}>
           Connect to a wallet
@@ -38,16 +36,14 @@ function ConnectWallet(): JSX.Element {
           <ModalCloseButton />
           <ModalBody>
             <Button
-              sx={{
-                justifyContent: 'space-between',
-                width: '100%',
-                mb: 4,
-              }}
+              justifyContent="space-between"
+              width="100%"
+              mb="4"
               size="lg"
               variant="outline"
               rightIcon={
                 <Image
-                  sx={{ maxWidth: '20px' }}
+                  maxWidth="20px"
                   src="/images/logo-metamask.png"
                   alt="MetaMask"
                 />
@@ -59,16 +55,14 @@ function ConnectWallet(): JSX.Element {
               MetaMask
             </Button>
             <Button
-              sx={{
-                justifyContent: 'space-between',
-                width: '100%',
-                mb: 4,
-              }}
+              justifyContent="space-between"
+              width="100%"
+              mb="4"
               size="lg"
               variant="outline"
               rightIcon={
                 <Image
-                  sx={{ maxWidth: '20px' }}
+                  maxWidth="20px"
                   src="/images/logo-walletconnect.svg"
                   alt="WalletConnect"
                 />
