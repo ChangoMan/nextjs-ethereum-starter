@@ -23,6 +23,7 @@ const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
 type StateType = {
   greeting: string
   inputValue: string
+  isLoading: boolean
 }
 type ActionType =
   | {
@@ -33,6 +34,10 @@ type ActionType =
       type: 'SET_INPUT_VALUE'
       inputValue: string
     }
+  | {
+      type: 'SET_LOADING'
+      isLoading: boolean
+    }
 
 /**
  * Component
@@ -40,6 +45,7 @@ type ActionType =
 const initialState: StateType = {
   greeting: '',
   inputValue: '',
+  isLoading: false,
 }
 
 function reducer(state: StateType, action: ActionType): StateType {
@@ -54,6 +60,11 @@ function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         inputValue: action.inputValue,
+      }
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.isLoading,
       }
     default:
       throw new Error()
@@ -77,11 +88,6 @@ function HomeIndex(): JSX.Element {
     signer: localProvider.getSigner(),
   })
 
-  // request access to the user's MetaMask account
-  async function requestAccount() {
-    await window.ethereum.request({ method: 'eth_requestAccounts' })
-  }
-
   // call the smart contract, read the current greeting value
   async function fetchContractGreeting() {
     if (library) {
@@ -104,7 +110,10 @@ function HomeIndex(): JSX.Element {
   async function setContractGreeting() {
     if (!state.inputValue) return
     if (library) {
-      await requestAccount()
+      dispatch({
+        type: 'SET_LOADING',
+        isLoading: true,
+      })
       const signer = library.getSigner()
       const contract = new ethers.Contract(
         CONTRACT_ADDRESS,
@@ -114,6 +123,10 @@ function HomeIndex(): JSX.Element {
       const transaction = await contract.setGreeting(state.inputValue)
       await transaction.wait()
       fetchContractGreeting()
+      dispatch({
+        type: 'SET_LOADING',
+        isLoading: false,
+      })
     }
   }
 
@@ -133,6 +146,7 @@ function HomeIndex(): JSX.Element {
         as="a"
         size="lg"
         colorScheme="teal"
+        variant="outline"
         href="https://github.com/ChangoMan/nextjs-ethereum-starter"
         target="_blank"
         rel="noopener noreferrer"
@@ -164,7 +178,12 @@ function HomeIndex(): JSX.Element {
               })
             }}
           />
-          <Button mt="2" colorScheme="teal" onClick={setContractGreeting}>
+          <Button
+            mt="2"
+            colorScheme="teal"
+            isLoading={state.isLoading}
+            onClick={setContractGreeting}
+          >
             Set Greeting
           </Button>
         </Box>
