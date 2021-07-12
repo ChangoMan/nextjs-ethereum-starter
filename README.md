@@ -22,8 +22,8 @@ Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-gu
 This project uses Yarn Workspaces, so you'll need [Yarn](https://classic.yarnpkg.com/en/docs/install)
 
 ```bash
-git clone https://github.com/ChangoMan/scaffold-eth-nextjs.git
-cd scaffold-eth-nextjs
+git clone https://github.com/ChangoMan/nextjs-ethereum-starter.git
+cd nextjs-ethereum-starter
 
 yarn install
 
