@@ -1,12 +1,17 @@
 # nextjs-ethereum-starter
 
-This is a work in progress!
+## This Project Has Moved!
+
+This project has been ported into a branch on [scaffold-eth](https://github.com/austintgriffith/scaffold-eth/tree/nextjs-typescript). Please head there for the latest updates. Also, please support the [BuidlGuidl!](https://buidlguidl.com).
+
+---
 
 My iteration of [Austin Griffith's scaffold-eth](https://github.com/austintgriffith/scaffold-eth).
 Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
 
 - [Typescript](https://www.typescriptlang.org/)
 - [Hardhat](https://hardhat.org/)
+- [TypeChain](https://github.com/ethereum-ts/TypeChain)
 - [Ethers.js](https://docs.ethers.io/v5/)
 - [useDApp](https://usedapp.io/)
 - [Chakra UI](https://chakra-ui.com/)
