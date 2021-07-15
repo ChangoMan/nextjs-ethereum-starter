@@ -2,7 +2,7 @@
 
 ## This Project Has Moved!
 
-This project has been ported into a branch on [scaffold-eth](https://github.com/austintgriffith/scaffold-eth/tree/nextjs-typescript). Please head there for the latest updates. Also, please support the [BuidlGuidl!](https://buidlguidl.com).
+This project has been ported into a branch on [scaffold-eth](https://github.com/austintgriffith/scaffold-eth/tree/nextjs-typescript). Please head there for the latest updates. Please support the [BuidlGuidl](https://buidlguidl.com) if this project has been helpful!
 
 ---
 
