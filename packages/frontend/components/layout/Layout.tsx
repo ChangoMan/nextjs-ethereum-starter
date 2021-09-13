@@ -107,13 +107,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                     {truncateHash(account)}
                   </MenuButton>
                   <MenuList>
-                    <MenuItem
-                      onClick={() => {
-                        deactivate()
-                      }}
-                    >
-                      Disconnect
-                    </MenuItem>
+                    <MenuItem onClick={deactivate}>Disconnect</MenuItem>
                   </MenuList>
                 </Menu>
               </Flex>
