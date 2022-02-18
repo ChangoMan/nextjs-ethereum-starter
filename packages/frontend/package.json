@@ -25,22 +25,22 @@
     ]
   },
   "dependencies": {
-    "@apollo/client": "3.1.1",
-    "@chakra-ui/react": "^1.6.3",
+    "@apollo/client": "3.5.9",
+    "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@usedapp/core": "^0.4.1",
-    "@web3-react/walletconnect-connector": "^6.2.0",
-    "@web3-react/walletlink-connector": "^6.2.3",
+    "@usedapp/core": "^0.11.0",
+    "@web3-react/walletconnect-connector": "^6.2.10",
+    "@web3-react/walletlink-connector": "^6.2.12",
     "blockies-ts": "^1.0.0",
     "deepmerge": "^4.2.2",
-    "ethers": "^5.1.4",
-    "framer-motion": "^4",
+    "ethers": "^5.5.4",
+    "framer-motion": "^6.2.6",
     "graphql": "^15.3.0",
     "lodash": "4.17.20",
-    "next": "^11.0.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "next": "^12.1.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@testing-library/react": "^11.2.5",
