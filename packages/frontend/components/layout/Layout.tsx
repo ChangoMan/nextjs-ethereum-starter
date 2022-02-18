@@ -152,7 +152,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
         <Container mt="8" py="8" maxWidth="container.xl">
           <Text>
             Built by{' '}
-            <Link href="https://twitter.com/hunterhchang">Hunter Chang</Link>
+            <Link href="https://twitter.com/huntarosan">Hunter Chang</Link>
           </Text>
         </Container>
       </footer>
