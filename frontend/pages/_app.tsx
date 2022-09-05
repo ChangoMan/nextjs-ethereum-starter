@@ -1,21 +1,21 @@
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react'
 import {
   connectorsForWallets,
   darkTheme,
   getDefaultWallets,
   RainbowKitProvider,
   wallet,
-} from '@rainbow-me/rainbowkit';
+} from '@rainbow-me/rainbowkit'
 import {
   GetSiweMessageOptions,
   RainbowKitSiweNextAuthProvider,
-} from '@rainbow-me/rainbowkit-siwe-next-auth';
-import '@rainbow-me/rainbowkit/styles.css';
-import { SessionProvider } from 'next-auth/react';
-import type { AppProps } from 'next/app';
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
+} from '@rainbow-me/rainbowkit-siwe-next-auth'
+import '@rainbow-me/rainbowkit/styles.css'
+import { SessionProvider } from 'next-auth/react'
+import type { AppProps } from 'next/app'
+import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -31,16 +31,16 @@ const { chains, provider, webSocketProvider } = configureChains(
     alchemyProvider({ apiKey: '_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC' }),
     publicProvider(),
   ]
-);
+)
 
 const { wallets } = getDefaultWallets({
   appName: 'RainbowKit demo',
   chains,
-});
+})
 
 const demoAppInfo = {
   appName: 'Rainbowkit Demo',
-};
+}
 
 const connectors = connectorsForWallets([
   ...wallets,
@@ -52,18 +52,18 @@ const connectors = connectorsForWallets([
       wallet.ledger({ chains }),
     ],
   },
-]);
+])
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors,
   provider,
   webSocketProvider,
-});
+})
 
 const getSiweMessageOptions: GetSiweMessageOptions = () => ({
   statement: 'Sign in to the RainbowKit + SIWE example app',
-});
+})
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -86,5 +86,5 @@ export default function App({ Component, pageProps }: AppProps) {
         </RainbowKitSiweNextAuthProvider>
       </WagmiConfig>
     </SessionProvider>
-  );
+  )
 }

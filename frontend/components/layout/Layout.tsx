@@ -1,12 +1,12 @@
-import { Container, Flex, Link, SimpleGrid, Text } from '@chakra-ui/react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import NextLink from 'next/link';
-import React from 'react';
-import { Head, MetaProps } from './Head';
+import { Container, Flex, Link, SimpleGrid, Text } from '@chakra-ui/react'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import NextLink from 'next/link'
+import React from 'react'
+import { Head, MetaProps } from './Head'
 
 interface LayoutProps {
-  children: React.ReactNode;
-  customMeta?: MetaProps;
+  children: React.ReactNode
+  customMeta?: MetaProps
 }
 
 export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
@@ -60,5 +60,5 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
         </Container>
       </footer>
     </>
-  );
-};
+  )
+}

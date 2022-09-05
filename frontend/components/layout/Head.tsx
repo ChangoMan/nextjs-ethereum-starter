@@ -1,19 +1,19 @@
-import NextHead from 'next/head';
-import { useRouter } from 'next/router';
+import NextHead from 'next/head'
+import { useRouter } from 'next/router'
 
 /**
  * Constants & Helpers
  */
-export const WEBSITE_HOST_URL = 'https://nextjs-ethereum-starter.vercel.app/';
+export const WEBSITE_HOST_URL = 'https://nextjs-ethereum-starter.vercel.app/'
 
 /**
  * Prop Types
  */
 export interface MetaProps {
-  description?: string;
-  image?: string;
-  title: string;
-  type?: string;
+  description?: string
+  image?: string
+  title: string
+  type?: string
 }
 
 /**
@@ -22,16 +22,16 @@ export interface MetaProps {
 export const Head = ({
   customMeta,
 }: {
-  customMeta?: MetaProps;
+  customMeta?: MetaProps
 }): JSX.Element => {
-  const router = useRouter();
+  const router = useRouter()
   const meta: MetaProps = {
     title: 'Next.js Ethereum Starter',
     description: 'Next.js - RainbowKit - Hardhat',
     image: `${WEBSITE_HOST_URL}/images/site-preview.png`,
     type: 'website',
     ...customMeta,
-  };
+  }
 
   return (
     <NextHead>
@@ -50,5 +50,5 @@ export const Head = ({
       <meta name="twitter:description" content={meta.description} />
       <meta name="twitter:image" content={meta.image} />
     </NextHead>
-  );
-};
+  )
+}

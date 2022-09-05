@@ -7,37 +7,37 @@ import {
   Heading,
   Link,
   Text,
-} from '@chakra-ui/react';
-import type { NextPage } from 'next';
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import { erc721ABI, useContractRead } from 'wagmi';
-import { Layout } from '../components/layout/Layout';
+} from '@chakra-ui/react'
+import type { NextPage } from 'next'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import { erc721ABI, useContractRead } from 'wagmi'
+import { Layout } from '../components/layout/Layout'
 
 const TokenGated: NextPage = () => {
-  const { data: session, status } = useSession();
-  const address = session?.user?.name;
+  const { data: session, status } = useSession()
+  const address = session?.user?.name
 
-  const isAuthenticated = status === 'authenticated';
+  const isAuthenticated = status === 'authenticated'
 
-  const [hasNft, setHasNft] = useState(false);
+  const [hasNft, setHasNft] = useState(false)
 
   const { data, isError, isLoading } = useContractRead({
     addressOrName: '0x13Bd2ac3779cBbCb2aC874C33f1145DD71Ce41ee',
     contractInterface: erc721ABI,
     functionName: 'balanceOf',
     args: address,
-  });
+  })
 
   useEffect(() => {
     if (!isLoading && data && data.toNumber) {
-      const numberOfNfts = data.toNumber();
+      const numberOfNfts = data.toNumber()
 
       if (numberOfNfts > 0) {
-        setHasNft(true);
+        setHasNft(true)
       }
     }
-  }, [data, isLoading]);
+  }, [data, isLoading])
 
   const sharedDescription = (
     <Text mb="4" fontSize="lg">
@@ -52,7 +52,7 @@ const TokenGated: NextPage = () => {
       </Link>{' '}
       Token.
     </Text>
-  );
+  )
 
   if (!isAuthenticated) {
     return (
@@ -63,7 +63,7 @@ const TokenGated: NextPage = () => {
         {sharedDescription}
         <Text fontSize="lg">Please connect a wallet</Text>
       </Layout>
-    );
+    )
   }
 
   if (isError) {
@@ -80,7 +80,7 @@ const TokenGated: NextPage = () => {
           </AlertDescription>
         </Alert>
       </Layout>
-    );
+    )
   }
 
   if (!hasNft) {
@@ -99,7 +99,7 @@ const TokenGated: NextPage = () => {
           <AlertDescription>You do not have the NFT.</AlertDescription>
         </Alert>
       </Layout>
-    );
+    )
   }
 
   return (
@@ -117,7 +117,7 @@ const TokenGated: NextPage = () => {
         <AlertDescription>You have the NFT!</AlertDescription>
       </Alert>
     </Layout>
-  );
-};
+  )
+}
 
-export default TokenGated;
+export default TokenGated

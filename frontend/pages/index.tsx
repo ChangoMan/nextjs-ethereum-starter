@@ -5,9 +5,69 @@ import {
   ListItem,
   Text,
   UnorderedList,
-} from '@chakra-ui/react';
-import type { NextPage } from 'next';
-import { Layout } from '../components/layout/Layout';
+} from '@chakra-ui/react'
+import type { NextPage } from 'next'
+import { Layout } from '../components/layout/Layout'
+
+/**
+ * Constants & Helpers
+ */
+
+const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
+
+/**
+ * Prop Types
+ */
+type StateType = {
+  greeting: string
+  inputValue: string
+  isLoading: boolean
+}
+type ActionType =
+  | {
+      type: 'SET_GREETING'
+      greeting: StateType['greeting']
+    }
+  | {
+      type: 'SET_INPUT_VALUE'
+      inputValue: StateType['inputValue']
+    }
+  | {
+      type: 'SET_LOADING'
+      isLoading: StateType['isLoading']
+    }
+
+/**
+ * Component
+ */
+const initialState: StateType = {
+  greeting: '',
+  inputValue: '',
+  isLoading: false,
+}
+
+function reducer(state: StateType, action: ActionType): StateType {
+  switch (action.type) {
+    // Track the greeting from the blockchain
+    case 'SET_GREETING':
+      return {
+        ...state,
+        greeting: action.greeting,
+      }
+    case 'SET_INPUT_VALUE':
+      return {
+        ...state,
+        inputValue: action.inputValue,
+      }
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.isLoading,
+      }
+    default:
+      throw new Error()
+  }
+}
 
 const Home: NextPage = () => {
   return (
@@ -47,7 +107,7 @@ const Home: NextPage = () => {
         Get the source code!
       </Button>
     </Layout>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

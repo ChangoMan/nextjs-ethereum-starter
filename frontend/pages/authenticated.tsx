@@ -1,11 +1,11 @@
-import { Code, Heading, Link, Text } from '@chakra-ui/react';
-import type { NextPage } from 'next';
-import { useSession } from 'next-auth/react';
-import { Layout } from '../components/layout/Layout';
+import { Code, Heading, Link, Text } from '@chakra-ui/react'
+import type { NextPage } from 'next'
+import { useSession } from 'next-auth/react'
+import { Layout } from '../components/layout/Layout'
 
 const Authenticated: NextPage = () => {
-  const { data: session, status } = useSession();
-  const address = session?.user?.name;
+  const { data: session, status } = useSession()
+  const address = session?.user?.name
 
   const sharedDescription = (
     <Text mb="4" fontSize="lg">
@@ -15,7 +15,7 @@ const Authenticated: NextPage = () => {
       </Link>{' '}
       to create an authenticated user session.
     </Text>
-  );
+  )
 
   if (status !== 'authenticated') {
     return (
@@ -26,7 +26,7 @@ const Authenticated: NextPage = () => {
         {sharedDescription}
         <Text fontSize="lg">Please connect a wallet</Text>
       </Layout>
-    );
+    )
   }
 
   return (
@@ -39,7 +39,7 @@ const Authenticated: NextPage = () => {
         Authenticated as: <Code colorScheme="orange">{address}</Code>
       </Text>
     </Layout>
-  );
-};
+  )
+}
 
-export default Authenticated;
+export default Authenticated
