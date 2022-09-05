@@ -11,18 +11,14 @@ Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-gu
 - [Hardhat](https://hardhat.org/)
 - [TypeChain](https://github.com/ethereum-ts/TypeChain)
 - [Ethers.js](https://docs.ethers.io/v5/)
-- [useDApp](https://usedapp.io/)
+- [RainbowKit](https://www.rainbowkit.com/)
 - [Chakra UI](https://chakra-ui.com/)
-- Linting with [ESLint](https://eslint.org/)
-- Formatting with [Prettier](https://prettier.io/)
-- Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks
-- Testing with [Jest](https://jestjs.io/) and [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro)
 
 👀 [View the Live Demo](https://nextjs-ethereum-starter.vercel.app/)
 
 ## Getting Started
 
-This project uses Yarn Workspaces, so you'll need [Yarn](https://classic.yarnpkg.com/en/docs/install)
+It is recommended to use Yarn to avoid dependency collisions: [Yarn](https://classic.yarnpkg.com/en/docs/install)
 
 ```bash
 git clone https://github.com/ChangoMan/nextjs-ethereum-starter.git
@@ -43,9 +39,22 @@ yarn deploy
 This will deploy the contract to Hardhat Network. After this completes run:
 
 ```bash
+cd frontend
+yarn install
+```
+
+This will install the frontend packaged. We also need to set up the local configuration file.
+
+```bash
+cp .env.local.example .env.local
+```
+
+This will create a file called `.env.local`. Open up that file and fill in the `NEXTAUTH_SECRET=` environment variable.
+
+```bash
 yarn dev
 ```
 
-This will start up the Next.js development server and your site will be available at http://localhost:3000/
+This will start up the Next.js development server. Your site will be available at http://localhost:3000/
 
 To interact with the local contract, be sure to switch your MetaMask Network to `Localhost 8545`
