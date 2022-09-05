@@ -43,7 +43,7 @@ cd frontend
 yarn install
 ```
 
-This will install the frontend packaged. We also need to set up the local configuration file.
+This will install the frontend packages. We also need to set up the local configuration file.
 
 ```bash
 cp .env.local.example .env.local

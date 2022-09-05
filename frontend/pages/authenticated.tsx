@@ -5,6 +5,7 @@ import { Layout } from '../components/layout/Layout';
 
 const Authenticated: NextPage = () => {
   const { data: session, status } = useSession();
+  // @ts-ignore: Fix `address` type
   const { address = '' } = session || {};
 
   if (status !== 'authenticated') {

@@ -15,6 +15,7 @@ import { Layout } from '../components/layout/Layout';
 
 const TokenGated: NextPage = () => {
   const { data: session, status } = useSession();
+  // @ts-ignore: Fix `address` type
   const { address = '' } = session || {};
 
   const isAuthenticated = status === 'authenticated';
