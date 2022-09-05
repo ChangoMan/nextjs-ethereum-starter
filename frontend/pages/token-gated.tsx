@@ -5,6 +5,7 @@ import {
   AlertTitle,
   Code,
   Heading,
+  Link,
   Text,
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
@@ -15,8 +16,7 @@ import { Layout } from '../components/layout/Layout';
 
 const TokenGated: NextPage = () => {
   const { data: session, status } = useSession();
-  // @ts-ignore: Fix `address` type
-  const { address = '' } = session || {};
+  const address = session?.user?.name;
 
   const isAuthenticated = status === 'authenticated';
 
@@ -39,12 +39,28 @@ const TokenGated: NextPage = () => {
     }
   }, [data, isLoading]);
 
+  const sharedDescription = (
+    <Text mb="4" fontSize="lg">
+      This page will check your authenticated user&apos;s address for a
+      particular NFT. For demo purposes, this is checking for the{' '}
+      <Link
+        href="https://etherscan.io/address/0x13bd2ac3779cbbcb2ac874c33f1145dd71ce41ee"
+        color="teal.500"
+        isExternal
+      >
+        CompanionInABox (CBOX)
+      </Link>{' '}
+      Token.
+    </Text>
+  );
+
   if (!isAuthenticated) {
     return (
       <Layout>
         <Heading as="h1" mb="8">
           Unauthenticated
         </Heading>
+        {sharedDescription}
         <Text fontSize="lg">Please connect a wallet</Text>
       </Layout>
     );
@@ -73,6 +89,7 @@ const TokenGated: NextPage = () => {
         <Heading as="h1" mb="8">
           Token Gated Page
         </Heading>
+        {sharedDescription}
         <Text mb="4" fontSize="lg">
           Authenticated as <Code colorScheme="orange">{address}</Code>
         </Text>
@@ -90,8 +107,9 @@ const TokenGated: NextPage = () => {
       <Heading as="h1" mb="8">
         Token Gated Page
       </Heading>
+      {sharedDescription}
       <Text mb="4" fontSize="lg">
-        Authenticated as <Code colorScheme="orange">{address}</Code>
+        Authenticated as: <Code colorScheme="orange">{address}</Code>
       </Text>
       <Alert status="success">
         <AlertIcon />
