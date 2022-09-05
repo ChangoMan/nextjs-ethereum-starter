@@ -12,7 +12,13 @@ import {
 import { ethers, providers } from 'ethers'
 import type { NextPage } from 'next'
 import { useCallback, useEffect, useReducer } from 'react'
-import { useAccount, useNetwork, useProvider } from 'wagmi'
+import {
+  useAccount,
+  useContractWrite,
+  useNetwork,
+  usePrepareContractWrite,
+  useProvider,
+} from 'wagmi'
 import { YourContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
 import { Layout } from '../components/layout/Layout'
@@ -96,21 +102,29 @@ function reducer(state: StateType, action: ActionType): StateType {
 const Home: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  const CONTRACT_ADDRESS = state.isLocalChain
+    ? LOCAL_CONTRACT_ADDRESS
+    : ROPSTEN_CONTRACT_ADDRESS
+
   const { address } = useAccount()
   const { chain } = useNetwork()
   const provider = useProvider()
+
+  const { config } = usePrepareContractWrite({
+    addressOrName: CONTRACT_ADDRESS,
+    contractInterface: YourContract.abi,
+    functionName: 'setGreeting',
+    args: state.inputValue,
+    enabled: Boolean(state.inputValue),
+  })
+
+  const { write } = useContractWrite(config)
 
   useEffect(() => {
     if (chain && chain.id === 1337) {
       dispatch({ type: 'SET_IS_LOCAL_CHAIN', isLocalChain: true })
     }
   }, [chain])
-
-  const CONTRACT_ADDRESS = state.isLocalChain
-    ? LOCAL_CONTRACT_ADDRESS
-    : ROPSTEN_CONTRACT_ADDRESS
-
-  // const CONTRACT_ADDRESS = LOCAL_CONTRACT_ADDRESS
 
   // Use the localProvider as the signer to send ETH to our wallet
   const sendFunds = useCallback(async () => {
@@ -141,30 +155,6 @@ const Home: NextPage = () => {
       }
     }
   }
-
-  // call the smart contract, send an update
-  // async function setContractGreeting() {
-  //   if (!state.inputValue) return
-  //   if (library) {
-  //     dispatch({
-  //       type: 'SET_LOADING',
-  //       isLoading: true,
-  //     })
-  //     const signer = library.getSigner()
-  //     const contract = new ethers.Contract(
-  //       CONTRACT_ADDRESS,
-  //       YourContract.abi,
-  //       signer
-  //     ) as YourContractType
-  //     const transaction = await contract.setGreeting(state.inputValue)
-  //     await transaction.wait()
-  //     fetchContractGreeting()
-  //     dispatch({
-  //       type: 'SET_LOADING',
-  //       isLoading: false,
-  //     })
-  //   }
-  // }
 
   return (
     <Layout>
@@ -217,25 +207,28 @@ const Home: NextPage = () => {
         </Box>
         <Divider my="8" borderColor="gray.400" />
         <Box>
+          <Text fontSize="lg" mb="2">
+            Enter a Greeting:
+          </Text>
           <Input
             bg="white"
             type="text"
             placeholder="Enter a Greeting"
-            onChange={(e) => {
+            onBlur={(e) => {
               dispatch({
                 type: 'SET_INPUT_VALUE',
                 inputValue: e.target.value,
               })
             }}
           />
-          {/* <Button
+          <Button
             mt="2"
             colorScheme="teal"
             isLoading={state.isLoading}
-            onClick={setContractGreeting}
+            onClick={() => write?.()}
           >
             Set Greeting
-          </Button> */}
+          </Button>
         </Box>
         <Divider my="8" borderColor="gray.400" />
         <Text mb="4">This button only works on a Local Chain.</Text>
