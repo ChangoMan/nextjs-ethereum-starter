@@ -166,6 +166,11 @@ const Home: NextPage = () => {
       </Text>
       <UnorderedList mb="8">
         <ListItem>
+          <Link href="https://hardhat.org/" color="teal.500" isExternal>
+            Hardhat
+          </Link>
+        </ListItem>
+        <ListItem>
           <Link href="https://nextjs.org/" color="teal.500" isExternal>
             Next.js
           </Link>

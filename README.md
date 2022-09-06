@@ -7,10 +7,8 @@ This project was sponsored by the [BuidlGuidl](https://buidlguidl.com). Please s
 My iteration of [Austin Griffith's scaffold-eth](https://github.com/austintgriffith/scaffold-eth).
 Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
 
-- [Typescript](https://www.typescriptlang.org/)
 - [Hardhat](https://hardhat.org/)
-- [TypeChain](https://github.com/ethereum-ts/TypeChain)
-- [Ethers.js](https://docs.ethers.io/v5/)
+- [Next.js](https://nextjs.org/)
 - [RainbowKit](https://www.rainbowkit.com/)
 - [Chakra UI](https://chakra-ui.com/)
 
