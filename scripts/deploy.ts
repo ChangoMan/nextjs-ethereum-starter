@@ -23,6 +23,11 @@ async function main() {
   await contract.deployed();
   saveFrontendFiles(contract, 'YourContract');
   console.log('YourContract deployed to:', contract.address);
+
+  const YourNFT = await ethers.getContractFactory('YourNFT');
+  const YourNFTContract = await YourNFT.deploy();
+  await YourNFTContract.deployed();
+  console.log('YourNFT deployed to:', YourNFTContract.address);
 }
 
 // https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/scripts/deploy.js
