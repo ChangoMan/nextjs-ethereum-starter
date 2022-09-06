@@ -564,7 +564,7 @@ export interface YourNFT extends BaseContract {
       to: PromiseOrValue<string>,
       uri: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
