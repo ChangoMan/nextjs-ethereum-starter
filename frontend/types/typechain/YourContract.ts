@@ -12,7 +12,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -44,8 +48,23 @@ export interface YourContractInterface extends utils.Interface {
     data: BytesLike
   ): Result;
 
-  events: {};
+  events: {
+    "SetGreeting(address,string)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "SetGreeting"): EventFragment;
 }
+
+export interface SetGreetingEventObject {
+  sender: string;
+  greeting: string;
+}
+export type SetGreetingEvent = TypedEvent<
+  [string, string],
+  SetGreetingEventObject
+>;
+
+export type SetGreetingEventFilter = TypedEventFilter<SetGreetingEvent>;
 
 export interface YourContract extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -77,7 +96,7 @@ export interface YourContract extends BaseContract {
     greeting(overrides?: CallOverrides): Promise<[string]>;
 
     setGreeting(
-      _greeting: PromiseOrValue<string>,
+      newGreeting: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
@@ -85,7 +104,7 @@ export interface YourContract extends BaseContract {
   greeting(overrides?: CallOverrides): Promise<string>;
 
   setGreeting(
-    _greeting: PromiseOrValue<string>,
+    newGreeting: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -93,18 +112,24 @@ export interface YourContract extends BaseContract {
     greeting(overrides?: CallOverrides): Promise<string>;
 
     setGreeting(
-      _greeting: PromiseOrValue<string>,
+      newGreeting: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "SetGreeting(address,string)"(
+      sender?: null,
+      greeting?: null
+    ): SetGreetingEventFilter;
+    SetGreeting(sender?: null, greeting?: null): SetGreetingEventFilter;
+  };
 
   estimateGas: {
     greeting(overrides?: CallOverrides): Promise<BigNumber>;
 
     setGreeting(
-      _greeting: PromiseOrValue<string>,
+      newGreeting: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
@@ -113,7 +138,7 @@ export interface YourContract extends BaseContract {
     greeting(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     setGreeting(
-      _greeting: PromiseOrValue<string>,
+      newGreeting: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

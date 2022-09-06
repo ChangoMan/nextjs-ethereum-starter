@@ -9,15 +9,22 @@ import "hardhat/console.sol";
 
 // This is the main building block for smart contracts.
 contract YourContract {
-    string public greeting;
+    event SetGreeting(address sender, string greeting);
 
-    constructor(string memory _greeting) {
-        console.log("Deploying YourContract with greeting:", _greeting);
-        greeting = _greeting;
+    string public greeting = "Hello Ethereum!";
+
+    constructor() payable {
+        // what should we do on deploy?
     }
 
-    function setGreeting(string memory _greeting) public {
-        console.log("Changing greeting from '%s' to '%s'", greeting, _greeting);
-        greeting = _greeting;
+    function setGreeting(string memory newGreeting) public {
+        greeting = newGreeting;
+        console.log(msg.sender, "set greeting to", greeting);
+        emit SetGreeting(msg.sender, greeting);
     }
+
+    // to support receiving ETH by default
+    receive() external payable {}
+
+    fallback() external payable {}
 }

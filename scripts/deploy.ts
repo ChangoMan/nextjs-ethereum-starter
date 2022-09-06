@@ -19,7 +19,7 @@ async function main() {
 
   // We get the contract to deploy
   const YourContract = await ethers.getContractFactory('YourContract');
-  const contract = await YourContract.deploy('Hello, Hardhat!');
+  const contract = await YourContract.deploy();
   await contract.deployed();
   saveFrontendFiles(contract, 'YourContract');
   console.log('YourContract deployed to:', contract.address);
