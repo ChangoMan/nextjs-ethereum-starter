@@ -15,7 +15,7 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
-  fs.unlinkSync(`${config.paths.artifacts}/contracts/contractAddress.ts`);
+  // fs.unlinkSync(`${config.paths.artifacts}/contracts/contractAddress.ts`);
 
   // We get the contract to deploy
   const YourContract = await ethers.getContractFactory('YourContract');
@@ -27,7 +27,7 @@ async function main() {
 
 // https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/scripts/deploy.js
 function saveFrontendFiles(contract: Contract, contractName: string) {
-  fs.appendFileSync(
+  fs.writeFileSync(
     `${config.paths.artifacts}/contracts/contractAddress.ts`,
     `export const ${contractName} = '${contract.address}'\n`
   );
