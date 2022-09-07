@@ -1,4 +1,24 @@
-export const generateTokenUri = (data) => {
+type urlsType = {
+  regular: string
+}
+
+type userType = {
+  username: string
+}
+
+// This data comes from the Unsplash API
+// https://unsplash.com/developers
+type dataType = {
+  description: string
+  urls: urlsType
+  user: userType
+  views: number
+  width: number
+  height: number
+  downloads: number
+}
+
+export const generateTokenUri = (data: dataType) => {
   const tokenUri = {
     description: data.description,
     image: data.urls.regular,
