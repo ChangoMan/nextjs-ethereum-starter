@@ -92,7 +92,7 @@ const NftIndex: NextPage = () => {
     }
 
     try {
-      // Fetch a random photo fron Unsplash
+      // Fetch a random photo from Unsplash
       const photos = await fetchImage()
 
       // Convert that photo into `tokenURI` metadata
@@ -117,7 +117,7 @@ const NftIndex: NextPage = () => {
   return (
     <Layout>
       <Heading as="h1" mb="8">
-        NftIndex
+        Mint NFT
       </Heading>
       <Button colorScheme="teal" onClick={mintItem}>
         Mint NFT
