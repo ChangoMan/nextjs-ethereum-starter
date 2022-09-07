@@ -53,11 +53,11 @@ const NftIndex: NextPage = () => {
     addressOrName: CONTRACT_ADDRESS,
     contractInterface: YourNFT.abi,
     functionName: 'tokenURI',
-    args: '3',
+    args: '4',
   })
 
-  // console.log('nftBalanceData', nftBalanceData)
-  // console.log('nftTokenUri', nftTokenUri)
+  console.log('nftBalanceData', nftBalanceData)
+  console.log('nftTokenUri', nftTokenUri)
 
   const { config } = usePrepareContractWrite({
     addressOrName: CONTRACT_ADDRESS,
@@ -92,13 +92,17 @@ const NftIndex: NextPage = () => {
     }
 
     try {
-      // const photos = await fetchImage()
+      // Fetch a random photo fron Unsplash
+      const photos = await fetchImage()
 
-      const tokenuri = generateTokenUri()
-      // const uploaded = await ipfs.add('cool')
+      // Convert that photo into `tokenURI` metadata
+      const tokenURI = generateTokenUri(photos)
+
+      // Upload the `tokenURI` to IPFS
+      const uploaded = await ipfs.add(tokenURI)
 
       // // This will trigger the useEffect to run the `write()` function.
-      // setNftUri(`${IPFS_BASE_URL}/${uploaded.path}`)
+      setNftUri(`${IPFS_BASE_URL}/${uploaded.path}`)
     } catch (error) {
       console.log('error', error)
     }
