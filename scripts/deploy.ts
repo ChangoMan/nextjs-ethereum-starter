@@ -3,7 +3,6 @@
 //
 // When running the script with `hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-import { Contract } from 'ethers';
 import fs from 'fs';
 import { config, ethers } from 'hardhat';
 
@@ -21,20 +20,30 @@ async function main() {
   const YourContract = await ethers.getContractFactory('YourContract');
   const contract = await YourContract.deploy();
   await contract.deployed();
-  saveFrontendFiles(contract, 'YourContract');
   console.log('YourContract deployed to:', contract.address);
 
   const YourNFT = await ethers.getContractFactory('YourNFT');
   const YourNFTContract = await YourNFT.deploy();
   await YourNFTContract.deployed();
   console.log('YourNFT deployed to:', YourNFTContract.address);
+  saveFrontendFiles(
+    contract.address,
+    'YourContract',
+    YourNFTContract.address,
+    'YourNFTContract'
+  );
 }
 
 // https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/scripts/deploy.js
-function saveFrontendFiles(contract: Contract, contractName: string) {
+function saveFrontendFiles(
+  contractAddress: string,
+  contractName: string,
+  nftContractAddress: string,
+  nftContractName: string
+) {
   fs.writeFileSync(
     `${config.paths.artifacts}/contracts/contractAddress.ts`,
-    `export const ${contractName} = '${contract.address}'\n`
+    `export const ${contractName} = '${contractAddress}'\nexport const ${nftContractName} = '${nftContractAddress}'\n`
   );
 }
 

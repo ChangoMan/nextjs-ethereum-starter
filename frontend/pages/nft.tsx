@@ -9,11 +9,12 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
+import { YourNFTContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import YourNFT from '../artifacts/contracts/YourNFT.sol/YourNFT.json'
 import { Layout } from '../components/layout/Layout'
 import { generateTokenUri } from '../utils/generateTokenUri'
 
-const CONTRACT_ADDRESS = '0xe7f1725e7734ce288f8367e1bb143e90bb3f0512'
+const CONTRACT_ADDRESS = LOCAL_CONTRACT_ADDRESS
 
 const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
 
