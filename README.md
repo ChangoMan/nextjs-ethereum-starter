@@ -10,6 +10,7 @@ Also inspired by [Nader Dabit's blog post](https://dev.to/dabit3/the-complete-gu
 - [Hardhat](https://hardhat.org/)
 - [Next.js](https://nextjs.org/)
 - [RainbowKit](https://www.rainbowkit.com/)
+- [wagmi](https://wagmi.sh/)
 - [Chakra UI](https://chakra-ui.com/)
 
 👀 [View the Live Demo](https://nextjs-ethereum-starter.vercel.app/)

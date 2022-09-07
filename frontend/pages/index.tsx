@@ -181,6 +181,11 @@ const Home: NextPage = () => {
           </Link>
         </ListItem>
         <ListItem>
+          <Link href="https://wagmi.sh/" color="teal.500" isExternal>
+            wagmi Hooks
+          </Link>
+        </ListItem>
+        <ListItem>
           <Link href="https://chakra-ui.com" color="teal.500" isExternal>
             Chakra UI
           </Link>
