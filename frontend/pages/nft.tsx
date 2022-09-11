@@ -7,6 +7,7 @@ import {
   useContractRead,
   useContractReads,
   useContractWrite,
+  useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
@@ -16,12 +17,7 @@ import { Layout } from '../components/layout/Layout'
 import { NftList } from '../components/NftList'
 import { generateTokenUri } from '../utils/generateTokenUri'
 
-const CONTRACT_ADDRESS = LOCAL_CONTRACT_ADDRESS
-
-const CONTRACT_CONFIG = {
-  addressOrName: CONTRACT_ADDRESS,
-  contractInterface: YourNFT.abi,
-}
+const GOERLI_CONTRACT_ADDRESS = '0x982659f8ce3988096A735044aD42445D6514ba7e'
 
 const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
 
@@ -44,13 +40,26 @@ const ipfs = create({
 
 const NftIndex: NextPage = () => {
   const [nftUri, setNftUri] = useState('')
+  const [isLocalChain, setIsLocalChain] = useState(false)
 
   const hasNftUri = Boolean(nftUri)
 
+  const CONTRACT_ADDRESS = isLocalChain
+    ? LOCAL_CONTRACT_ADDRESS
+    : GOERLI_CONTRACT_ADDRESS
+
+  const { chain } = useNetwork()
   const { data: session } = useSession()
   const address = session?.user?.name
 
   const toast = useToast()
+
+  const CONTRACT_CONFIG = useMemo(() => {
+    return {
+      addressOrName: CONTRACT_ADDRESS,
+      contractInterface: YourNFT.abi,
+    }
+  }, [CONTRACT_ADDRESS])
 
   // Gets the total number of NFTs owned by the connected address.
   const { data: nftBalanceData, refetch: refetchNftBalanceData } =
@@ -79,7 +88,7 @@ const NftIndex: NextPage = () => {
     }
 
     return contractCalls
-  }, [address, nftBalanceData])
+  }, [CONTRACT_CONFIG, address, nftBalanceData])
 
   // Gets all of the NFT tokenIds owned by the connected address.
   const { data: nftTokenIds } = useContractReads({
@@ -102,7 +111,7 @@ const NftIndex: NextPage = () => {
     })
 
     return contractCalls
-  }, [nftTokenIds])
+  }, [CONTRACT_CONFIG, nftTokenIds])
 
   // Gets all of the NFT tokenUris owned by the connected address.
   const { data: nftTokenUris } = useContractReads({
@@ -183,6 +192,12 @@ const NftIndex: NextPage = () => {
       write()
     }
   }, [hasNftUri, write])
+
+  useEffect(() => {
+    if (chain && chain.id === 1337) {
+      setIsLocalChain(true)
+    }
+  }, [chain])
 
   return (
     <Layout>

@@ -32,7 +32,7 @@ const localProvider = new providers.StaticJsonRpcProvider(
   'http://localhost:8545'
 )
 
-const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
+const GOERLI_CONTRACT_ADDRESS = '0x3B73833638556f10ceB1b49A18a27154e3828303'
 
 /**
  * Prop Types
@@ -104,7 +104,7 @@ const Home: NextPage = () => {
 
   const CONTRACT_ADDRESS = state.isLocalChain
     ? LOCAL_CONTRACT_ADDRESS
-    : ROPSTEN_CONTRACT_ADDRESS
+    : GOERLI_CONTRACT_ADDRESS
 
   const { address } = useAccount()
   const { chain } = useNetwork()
@@ -204,7 +204,7 @@ const Home: NextPage = () => {
       </Button>
 
       <Text mt="8" fontSize="xl">
-        This page only works on the ROPSTEN Testnet or on a Local Chain.
+        This page only works on the GOERLI Testnet or on a Local Chain.
       </Text>
       <Box maxWidth="container.sm" p="8" mt="8" bg="gray.100">
         <Text fontSize="xl">Contract Address: {CONTRACT_ADDRESS}</Text>
