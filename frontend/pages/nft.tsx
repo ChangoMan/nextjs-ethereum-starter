@@ -1,10 +1,11 @@
-import { Button, Heading } from '@chakra-ui/react'
+import { Button, Heading, Link, Text, useToast } from '@chakra-ui/react'
 import { create } from 'ipfs-http-client'
 import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   useContractRead,
+  useContractReads,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
@@ -12,9 +13,15 @@ import {
 import { YourNFTContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import YourNFT from '../artifacts/contracts/YourNFT.sol/YourNFT.json'
 import { Layout } from '../components/layout/Layout'
+import { NftList } from '../components/NftList'
 import { generateTokenUri } from '../utils/generateTokenUri'
 
 const CONTRACT_ADDRESS = LOCAL_CONTRACT_ADDRESS
+
+const CONTRACT_CONFIG = {
+  addressOrName: CONTRACT_ADDRESS,
+  contractInterface: YourNFT.abi,
+}
 
 const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
 
@@ -43,26 +50,67 @@ const NftIndex: NextPage = () => {
   const { data: session } = useSession()
   const address = session?.user?.name
 
+  const toast = useToast()
+
+  // Gets the total number of NFTs owned by the connected address.
   const { data: nftBalanceData } = useContractRead({
-    addressOrName: CONTRACT_ADDRESS,
-    contractInterface: YourNFT.abi,
+    ...CONTRACT_CONFIG,
     functionName: 'balanceOf',
     args: address,
   })
 
-  const { data: nftTokenUri } = useContractRead({
-    addressOrName: CONTRACT_ADDRESS,
-    contractInterface: YourNFT.abi,
-    functionName: 'tokenURI',
-    args: '4',
+  // Creates the contracts array for `nftTokenIds`
+  const tokenOwnerContractsArray = useMemo(() => {
+    let contractCalls = []
+
+    if (nftBalanceData && nftBalanceData.toNumber) {
+      const nftBalance = nftBalanceData.toNumber()
+
+      for (let tokenIndex = 0; tokenIndex < nftBalance; tokenIndex++) {
+        const contractObj = {
+          ...CONTRACT_CONFIG,
+          functionName: 'tokenOfOwnerByIndex',
+          args: [address, tokenIndex],
+        }
+
+        contractCalls.push(contractObj)
+      }
+    }
+
+    return contractCalls
+  }, [address, nftBalanceData])
+
+  // Gets all of the NFT tokenIds owned by the connected address.
+  const { data: nftTokenIds } = useContractReads({
+    contracts: tokenOwnerContractsArray,
+    enabled: tokenOwnerContractsArray.length > 0,
   })
 
-  console.log('nftBalanceData', nftBalanceData)
-  console.log('nftTokenUri', nftTokenUri)
+  // Creates the contracts array for `nftTokenUris`
+  const tokenUriContractsArray = useMemo(() => {
+    if (!nftTokenIds || nftTokenIds.length === 0) {
+      return []
+    }
+
+    const contractCalls = nftTokenIds?.map((tokenId) => {
+      return {
+        ...CONTRACT_CONFIG,
+        functionName: 'tokenURI',
+        args: tokenId,
+      }
+    })
+
+    return contractCalls
+  }, [nftTokenIds])
+
+  // Gets all of the NFT tokenUris owned by the connected address.
+  const { data: nftTokenUris } = useContractReads({
+    contracts: tokenUriContractsArray,
+    enabled: tokenUriContractsArray.length > 0,
+  })
 
   const { config } = usePrepareContractWrite({
-    addressOrName: CONTRACT_ADDRESS,
-    contractInterface: YourNFT.abi,
+    ...CONTRACT_CONFIG,
     functionName: 'safeMint',
     args: [address, nftUri],
     enabled: hasNftUri,
@@ -70,11 +118,30 @@ const NftIndex: NextPage = () => {
 
   const { data, write } = useContractWrite(config)
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
+  const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
     onSuccess(data) {
       console.log('success data', data)
       setNftUri('')
+      toast({
+        title: 'Transaction Successful',
+        description: (
+          <>
+            <Text>Successfully minted your NFT!</Text>
+            <Text>
+              <Link
+                href={`https://etherscan.io/tx/${data?.blockHash}`}
+                isExternal
+              >
+                View on Etherscan
+              </Link>
+            </Text>
+          </>
+        ),
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
     },
   })
 
@@ -120,9 +187,12 @@ const NftIndex: NextPage = () => {
       <Heading as="h1" mb="8">
         Mint NFT
       </Heading>
-      <Button colorScheme="teal" onClick={mintItem}>
+      <Button colorScheme="teal" onClick={mintItem} isLoading={isLoading}>
         Mint NFT
       </Button>
+      {nftTokenUris && (
+        <NftList address={address} ipfs={ipfs} nftTokenUris={nftTokenUris} />
+      )}
     </Layout>
   )
 }
