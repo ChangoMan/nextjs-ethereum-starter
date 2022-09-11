@@ -53,11 +53,12 @@ const NftIndex: NextPage = () => {
   const toast = useToast()
 
   // Gets the total number of NFTs owned by the connected address.
-  const { data: nftBalanceData } = useContractRead({
-    ...CONTRACT_CONFIG,
-    functionName: 'balanceOf',
-    args: address,
-  })
+  const { data: nftBalanceData, refetch: refetchNftBalanceData } =
+    useContractRead({
+      ...CONTRACT_CONFIG,
+      functionName: 'balanceOf',
+      args: address,
+    })
 
   // Creates the contracts array for `nftTokenIds`
   const tokenOwnerContractsArray = useMemo(() => {
@@ -142,6 +143,7 @@ const NftIndex: NextPage = () => {
         duration: 5000,
         isClosable: true,
       })
+      refetchNftBalanceData()
     },
   })
 

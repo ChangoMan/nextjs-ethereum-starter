@@ -1,4 +1,12 @@
-import { Alert, AlertIcon, Box, Image, Text } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Flex,
+  Image,
+  SimpleGrid,
+  Text,
+} from '@chakra-ui/react'
 import { Result } from '@ethersproject/abi'
 import { IPFSHTTPClient } from 'ipfs-http-client'
 import { useEffect, useState } from 'react'
@@ -65,19 +73,33 @@ export const NftList = ({
 
   return (
     <div>
-      {nfts.map((nft) => {
-        return (
-          <Box my="6" key={nft.image}>
-            <Image
-              boxSize="100px"
-              objectFit="cover"
-              src={nft.image}
-              alt={nft.name}
-            />
-            <Text>{nft.name}</Text>
-          </Box>
-        )
-      })}
+      <SimpleGrid my="6" columns={[1, 1, 2]} gap="6">
+        {nfts.map((nft) => {
+          return (
+            <Flex
+              key={nft.image}
+              p="4"
+              gap="4"
+              alignItems="center"
+              border="1px"
+              borderColor="gray.200"
+            >
+              <Image
+                boxSize={[100, 100, 200]}
+                objectFit="cover"
+                src={nft.image}
+                alt={nft.name}
+              />
+              <Box>
+                <Text fontSize="lg" fontWeight="semibold">
+                  {nft.name}
+                </Text>
+                <Text>{nft.description}</Text>
+              </Box>
+            </Flex>
+          )
+        })}
+      </SimpleGrid>
     </div>
   )
 }
