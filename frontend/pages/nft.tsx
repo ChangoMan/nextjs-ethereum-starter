@@ -1,4 +1,12 @@
-import { Button, Heading, Link, Text, useToast } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Divider,
+  Heading,
+  Link,
+  Text,
+  useToast,
+} from '@chakra-ui/react'
 import { create } from 'ipfs-http-client'
 import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
@@ -140,7 +148,7 @@ const NftIndex: NextPage = () => {
             <Text>Successfully minted your NFT!</Text>
             <Text>
               <Link
-                href={`https://etherscan.io/tx/${data?.blockHash}`}
+                href={`https://goerli.etherscan.io/tx/${data?.blockHash}`}
                 isExternal
               >
                 View on Etherscan
@@ -204,12 +212,29 @@ const NftIndex: NextPage = () => {
       <Heading as="h1" mb="8">
         Mint NFT
       </Heading>
-      <Button colorScheme="teal" onClick={mintItem} isLoading={isLoading}>
-        Mint NFT
-      </Button>
-      {nftTokenUris && (
-        <NftList address={address} ipfs={ipfs} nftTokenUris={nftTokenUris} />
-      )}
+      <Text mt="8" fontSize="xl">
+        This page only works on the GOERLI Testnet or on a Local Chain.
+      </Text>
+      <Box p="8" mt="8" bg="gray.100">
+        <Text fontSize="xl" textAlign="center">
+          Contract Address: {CONTRACT_ADDRESS}
+        </Text>
+        <Divider my="8" borderColor="gray.400" />
+        <Text textAlign="center">
+          <Button
+            colorScheme="teal"
+            size="lg"
+            onClick={mintItem}
+            isLoading={isLoading}
+          >
+            Mint NFT
+          </Button>
+        </Text>
+        <Divider my="8" borderColor="gray.400" />
+        {nftTokenUris && (
+          <NftList address={address} ipfs={ipfs} nftTokenUris={nftTokenUris} />
+        )}
+      </Box>
     </Layout>
   )
 }

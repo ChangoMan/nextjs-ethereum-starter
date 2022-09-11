@@ -81,8 +81,9 @@ export const NftList = ({
               p="4"
               gap="4"
               alignItems="center"
+              backgroundColor="white"
               border="1px"
-              borderColor="gray.200"
+              borderColor="gray.300"
             >
               <Image
                 boxSize={[100, 100, 200]}
