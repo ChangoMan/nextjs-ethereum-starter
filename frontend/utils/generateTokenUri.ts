@@ -1,24 +1,24 @@
-type urlsType = {
+type UrlsType = {
   regular: string
 }
 
-type userType = {
+type UserType = {
   username: string
 }
 
 // This data comes from the Unsplash API
 // https://unsplash.com/developers
-type dataType = {
+type DataType = {
   description: string
-  urls: urlsType
-  user: userType
+  urls: UrlsType
+  user: UserType
   views: number
   width: number
   height: number
   downloads: number
 }
 
-export const generateTokenUri = (data: dataType) => {
+export const generateTokenUri = (data: DataType) => {
   const tokenUri = {
     description: data.description,
     image: data.urls.regular,
