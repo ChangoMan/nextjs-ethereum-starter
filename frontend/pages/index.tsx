@@ -237,10 +237,10 @@ const Home: NextPage = () => {
           <Button
             mt="2"
             colorScheme="teal"
-            disabled={!provider}
+            disabled={!address}
             onClick={fetchContractGreeting}
           >
-            {provider ? 'Fetch Greeting' : 'Please Connect Your Wallet'}
+            {address ? 'Fetch Greeting' : 'Please Connect Your Wallet'}
           </Button>
         </Box>
         <Divider my="8" borderColor="gray.400" />
