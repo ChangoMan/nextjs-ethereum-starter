@@ -224,10 +224,11 @@ const NftIndex: NextPage = () => {
           <Button
             colorScheme="teal"
             size="lg"
+            disabled={!address}
             onClick={mintItem}
             isLoading={isLoading}
           >
-            Mint NFT
+            {address ? 'Mint NFT' : 'Please Connect Your Wallet'}
           </Button>
         </Text>
         <Divider my="8" borderColor="gray.400" />

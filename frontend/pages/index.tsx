@@ -8,16 +8,18 @@ import {
   ListItem,
   Text,
   UnorderedList,
+  useToast,
 } from '@chakra-ui/react'
 import { ethers, providers } from 'ethers'
 import type { NextPage } from 'next'
+import { useSession } from 'next-auth/react'
 import { useCallback, useEffect, useReducer } from 'react'
 import {
-  useAccount,
   useContractWrite,
   useNetwork,
   usePrepareContractWrite,
   useProvider,
+  useWaitForTransaction,
 } from 'wagmi'
 import { YourContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
@@ -40,7 +42,6 @@ const GOERLI_CONTRACT_ADDRESS = '0x3B73833638556f10ceB1b49A18a27154e3828303'
 type StateType = {
   greeting: string
   inputValue: string
-  isLoading: boolean
   isLocalChain: boolean
 }
 type ActionType =
@@ -53,10 +54,6 @@ type ActionType =
       inputValue: StateType['inputValue']
     }
   | {
-      type: 'SET_LOADING'
-      isLoading: StateType['isLoading']
-    }
-  | {
       type: 'SET_IS_LOCAL_CHAIN'
       isLocalChain: StateType['isLocalChain']
     }
@@ -67,7 +64,6 @@ type ActionType =
 const initialState: StateType = {
   greeting: '',
   inputValue: '',
-  isLoading: false,
   isLocalChain: false,
 }
 
@@ -83,11 +79,6 @@ function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         inputValue: action.inputValue,
-      }
-    case 'SET_LOADING':
-      return {
-        ...state,
-        isLoading: action.isLoading,
       }
     case 'SET_IS_LOCAL_CHAIN':
       return {
@@ -106,9 +97,13 @@ const Home: NextPage = () => {
     ? LOCAL_CONTRACT_ADDRESS
     : GOERLI_CONTRACT_ADDRESS
 
-  const { address } = useAccount()
+  const { data: session, status } = useSession()
+  const address = session?.user?.name
+
   const { chain } = useNetwork()
   const provider = useProvider()
+
+  const toast = useToast()
 
   const { config } = usePrepareContractWrite({
     addressOrName: CONTRACT_ADDRESS,
@@ -118,7 +113,33 @@ const Home: NextPage = () => {
     enabled: Boolean(state.inputValue),
   })
 
-  const { write } = useContractWrite(config)
+  const { data, write } = useContractWrite(config)
+
+  const { isLoading } = useWaitForTransaction({
+    hash: data?.hash,
+    onSuccess(data) {
+      console.log('success data', data)
+      toast({
+        title: 'Transaction Successful',
+        description: (
+          <>
+            <Text>Successfully updated the Greeting!</Text>
+            <Text>
+              <Link
+                href={`https://goerli.etherscan.io/tx/${data?.blockHash}`}
+                isExternal
+              >
+                View on Etherscan
+              </Link>
+            </Text>
+          </>
+        ),
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+    },
+  })
 
   useEffect(() => {
     if (chain && chain.id === 1337) {
@@ -128,14 +149,16 @@ const Home: NextPage = () => {
 
   // Use the localProvider as the signer to send ETH to our wallet
   const sendFunds = useCallback(async () => {
-    const signer = localProvider.getSigner()
+    if (address) {
+      const signer = localProvider.getSigner()
 
-    const transaction = await signer.sendTransaction({
-      to: address,
-      value: ethers.constants.WeiPerEther,
-    })
+      const transaction = await signer.sendTransaction({
+        to: address,
+        value: ethers.constants.WeiPerEther,
+      })
 
-    await transaction.wait()
+      await transaction.wait()
+    }
   }, [address])
 
   // call the smart contract, read the current greeting value
@@ -224,6 +247,7 @@ const Home: NextPage = () => {
             bg="white"
             type="text"
             placeholder="Enter a Greeting"
+            disabled={!address}
             onBlur={(e) => {
               dispatch({
                 type: 'SET_INPUT_VALUE',
@@ -234,7 +258,8 @@ const Home: NextPage = () => {
           <Button
             mt="2"
             colorScheme="teal"
-            isLoading={state.isLoading}
+            isLoading={isLoading}
+            disabled={!address}
             onClick={() => write?.()}
           >
             Set Greeting
