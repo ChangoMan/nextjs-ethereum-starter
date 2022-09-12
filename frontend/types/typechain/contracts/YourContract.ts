@@ -2,12 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 import type {
-  EventFragment,
-  FunctionFragment,
-  Result,
-} from '@ethersproject/abi'
-import type { Listener, Provider } from '@ethersproject/providers'
-import type {
   BaseContract,
   BigNumber,
   BytesLike,
@@ -17,126 +11,135 @@ import type {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers'
+} from "ethers";
 import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
+import type { Listener, Provider } from "@ethersproject/providers";
+import type {
+  TypedEventFilter,
+  TypedEvent,
+  TypedListener,
   OnEvent,
   PromiseOrValue,
-  TypedEvent,
-  TypedEventFilter,
-  TypedListener,
-} from '../common'
+} from "../common";
 
 export interface YourContractInterface extends utils.Interface {
   functions: {
-    'greeting()': FunctionFragment
-    'setGreeting(string)': FunctionFragment
-  }
+    "greeting()": FunctionFragment;
+    "setGreeting(string)": FunctionFragment;
+  };
 
   getFunction(
-    nameOrSignatureOrTopic: 'greeting' | 'setGreeting'
-  ): FunctionFragment
+    nameOrSignatureOrTopic: "greeting" | "setGreeting"
+  ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'greeting', values?: undefined): string
+  encodeFunctionData(functionFragment: "greeting", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'setGreeting',
+    functionFragment: "setGreeting",
     values: [PromiseOrValue<string>]
-  ): string
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'greeting', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'setGreeting', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "greeting", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setGreeting",
+    data: BytesLike
+  ): Result;
 
   events: {
-    'SetGreeting(address,string)': EventFragment
-  }
+    "SetGreeting(address,string)": EventFragment;
+  };
 
-  getEvent(nameOrSignatureOrTopic: 'SetGreeting'): EventFragment
+  getEvent(nameOrSignatureOrTopic: "SetGreeting"): EventFragment;
 }
 
 export interface SetGreetingEventObject {
-  sender: string
-  greeting: string
+  sender: string;
+  greeting: string;
 }
 export type SetGreetingEvent = TypedEvent<
   [string, string],
   SetGreetingEventObject
->
+>;
 
-export type SetGreetingEventFilter = TypedEventFilter<SetGreetingEvent>
+export type SetGreetingEventFilter = TypedEventFilter<SetGreetingEvent>;
 
 export interface YourContract extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this
-  attach(addressOrName: string): this
-  deployed(): Promise<this>
+  connect(signerOrProvider: Signer | Provider | string): this;
+  attach(addressOrName: string): this;
+  deployed(): Promise<this>;
 
-  interface: YourContractInterface
+  interface: YourContractInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>
+  ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
     eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>
-  listeners(eventName?: string): Array<Listener>
+  ): Array<TypedListener<TEvent>>;
+  listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
     eventFilter: TypedEventFilter<TEvent>
-  ): this
-  removeAllListeners(eventName?: string): this
-  off: OnEvent<this>
-  on: OnEvent<this>
-  once: OnEvent<this>
-  removeListener: OnEvent<this>
+  ): this;
+  removeAllListeners(eventName?: string): this;
+  off: OnEvent<this>;
+  on: OnEvent<this>;
+  once: OnEvent<this>;
+  removeListener: OnEvent<this>;
 
   functions: {
-    greeting(overrides?: CallOverrides): Promise<[string]>
+    greeting(overrides?: CallOverrides): Promise<[string]>;
 
     setGreeting(
       newGreeting: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>
-  }
+    ): Promise<ContractTransaction>;
+  };
 
-  greeting(overrides?: CallOverrides): Promise<string>
+  greeting(overrides?: CallOverrides): Promise<string>;
 
   setGreeting(
     newGreeting: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   callStatic: {
-    greeting(overrides?: CallOverrides): Promise<string>
+    greeting(overrides?: CallOverrides): Promise<string>;
 
     setGreeting(
       newGreeting: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<void>
-  }
+    ): Promise<void>;
+  };
 
   filters: {
-    'SetGreeting(address,string)'(
+    "SetGreeting(address,string)"(
       sender?: null,
       greeting?: null
-    ): SetGreetingEventFilter
-    SetGreeting(sender?: null, greeting?: null): SetGreetingEventFilter
-  }
+    ): SetGreetingEventFilter;
+    SetGreeting(sender?: null, greeting?: null): SetGreetingEventFilter;
+  };
 
   estimateGas: {
-    greeting(overrides?: CallOverrides): Promise<BigNumber>
+    greeting(overrides?: CallOverrides): Promise<BigNumber>;
 
     setGreeting(
       newGreeting: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>
-  }
+    ): Promise<BigNumber>;
+  };
 
   populateTransaction: {
-    greeting(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    greeting(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     setGreeting(
       newGreeting: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>
-  }
+    ): Promise<PopulatedTransaction>;
+  };
 }
