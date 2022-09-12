@@ -234,8 +234,13 @@ const Home: NextPage = () => {
         <Divider my="8" borderColor="gray.400" />
         <Box>
           <Text fontSize="lg">Greeting: {state.greeting}</Text>
-          <Button mt="2" colorScheme="teal" onClick={fetchContractGreeting}>
-            Fetch Greeting
+          <Button
+            mt="2"
+            colorScheme="teal"
+            disabled={!provider}
+            onClick={fetchContractGreeting}
+          >
+            {provider ? 'Fetch Greeting' : 'Please Connect Your Wallet'}
           </Button>
         </Box>
         <Divider my="8" borderColor="gray.400" />
