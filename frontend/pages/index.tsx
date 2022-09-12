@@ -262,7 +262,7 @@ const Home: NextPage = () => {
             disabled={!address}
             onClick={() => write?.()}
           >
-            Set Greeting
+            {address ? 'Set Greeting' : 'Please Connect Your Wallet'}
           </Button>
         </Box>
         <Divider my="8" borderColor="gray.400" />
