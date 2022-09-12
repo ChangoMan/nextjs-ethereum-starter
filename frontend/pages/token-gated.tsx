@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
+import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
 import { erc721ABI, useContractRead } from 'wagmi'
 import { Layout } from '../components/layout/Layout'
@@ -23,7 +24,7 @@ const TokenGated: NextPage = () => {
   const [hasNft, setHasNft] = useState(false)
 
   const { data, isError, isLoading } = useContractRead({
-    addressOrName: '0x13Bd2ac3779cBbCb2aC874C33f1145DD71Ce41ee',
+    addressOrName: '0x982659f8ce3988096A735044aD42445D6514ba7e',
     contractInterface: erc721ABI,
     functionName: 'balanceOf',
     args: address,
@@ -40,18 +41,27 @@ const TokenGated: NextPage = () => {
   }, [data, isLoading])
 
   const sharedDescription = (
-    <Text mb="4" fontSize="lg">
-      This page will check your authenticated user&apos;s address for a
-      particular NFT. For demo purposes, this is checking for the{' '}
-      <Link
-        href="https://etherscan.io/address/0x13bd2ac3779cbbcb2ac874c33f1145dd71ce41ee"
-        color="teal.500"
-        isExternal
-      >
-        CompanionInABox (CBOX)
-      </Link>{' '}
-      Token.
-    </Text>
+    <>
+      <Text mb="4" fontSize="lg">
+        This page will check your authenticated user&apos;s address for a
+        particular NFT.
+      </Text>
+      <Text mb="6" fontSize="lg">
+        This is checking for the{' '}
+        <Link
+          href="https://goerli.etherscan.io/token/0x982659f8ce3988096a735044ad42445d6514ba7e"
+          color="teal.500"
+          isExternal
+        >
+          CodeBushiToken (CBT)
+        </Link>{' '}
+        on the GOERLI Testnet. You can test this out by{' '}
+        <NextLink href="/nft" passHref>
+          <Link color="teal.500">Minting the NFT</Link>
+        </NextLink>
+        .
+      </Text>
+    </>
   )
 
   if (!isAuthenticated) {
