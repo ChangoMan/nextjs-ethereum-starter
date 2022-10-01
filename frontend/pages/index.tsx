@@ -238,7 +238,7 @@ const Home: NextPage = () => {
             bg="white"
             type="text"
             placeholder="Enter a Greeting"
-            disabled={!address}
+            disabled={!address || isLoading}
             onBlur={(e) => {
               dispatch({
                 type: 'SET_INPUT_VALUE',
@@ -250,7 +250,7 @@ const Home: NextPage = () => {
             mt="2"
             colorScheme="teal"
             isLoading={isLoading}
-            disabled={!address}
+            disabled={!address || isLoading}
             onClick={() => write?.()}
           >
             {address ? 'Set Greeting' : 'Please Connect Your Wallet'}

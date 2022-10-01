@@ -149,6 +149,7 @@ const TokenGated: NextPage<{ session: Session }> = ({ session }) => {
   )
 }
 
+// Remove server side session if you want a static site.
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   return {
     props: {

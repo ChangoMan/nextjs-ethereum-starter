@@ -224,7 +224,7 @@ const NftIndex: NextPage = () => {
           <Button
             colorScheme="teal"
             size="lg"
-            disabled={!address}
+            disabled={!address || isLoading}
             onClick={mintItem}
             isLoading={isLoading}
           >
