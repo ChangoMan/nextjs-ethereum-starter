@@ -13,7 +13,7 @@ import {
 import { ethers, providers } from 'ethers'
 import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
-import { useCallback, useEffect, useReducer } from 'react'
+import { useEffect, useReducer } from 'react'
 import {
   useContractWrite,
   useNetwork,
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
     ? LOCAL_CONTRACT_ADDRESS
     : GOERLI_CONTRACT_ADDRESS
 
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const address = session?.user?.name
 
   const { chain } = useNetwork()
@@ -146,20 +146,6 @@ const Home: NextPage = () => {
       dispatch({ type: 'SET_IS_LOCAL_CHAIN', isLocalChain: true })
     }
   }, [chain])
-
-  // Use the localProvider as the signer to send ETH to our wallet
-  const sendFunds = useCallback(async () => {
-    if (address) {
-      const signer = localProvider.getSigner()
-
-      const transaction = await signer.sendTransaction({
-        to: address,
-        value: ethers.constants.WeiPerEther,
-      })
-
-      await transaction.wait()
-    }
-  }, [address])
 
   // call the smart contract, read the current greeting value
   async function fetchContractGreeting() {
@@ -270,15 +256,6 @@ const Home: NextPage = () => {
             {address ? 'Set Greeting' : 'Please Connect Your Wallet'}
           </Button>
         </Box>
-        <Divider my="8" borderColor="gray.400" />
-        <Text mb="4">This button only works on a Local Chain.</Text>
-        <Button
-          colorScheme="teal"
-          onClick={sendFunds}
-          isDisabled={!state.isLocalChain}
-        >
-          Send Funds From Local Hardhat Chain
-        </Button>
       </Box>
     </Layout>
   )

@@ -8,16 +8,18 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react'
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
+import { unstable_getServerSession } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
 import { erc721ABI, useContractRead } from 'wagmi'
 import { Layout } from '../components/layout/Layout'
+import { getAuthOptions } from './api/auth/[...nextauth]'
 
-const TokenGated: NextPage = () => {
-  const { data: session, status } = useSession()
-  const address = session?.user?.name
+const TokenGated: NextPage = ({ session }) => {
+  const { data: clientSession, status } = useSession()
+  const address = session?.user?.name || clientSession?.user?.name
 
   const isAuthenticated = status === 'authenticated'
 
@@ -128,6 +130,14 @@ const TokenGated: NextPage = () => {
       </Alert>
     </Layout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  return {
+    props: {
+      session: await unstable_getServerSession(req, res, getAuthOptions(req)),
+    },
+  }
 }
 
 export default TokenGated
