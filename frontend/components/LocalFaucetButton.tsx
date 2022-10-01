@@ -1,9 +1,8 @@
 import { Button, useToast } from '@chakra-ui/react'
 import { ethers, providers } from 'ethers'
-import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
-import { useCallback, useEffect, useState } from 'react'
-import { useNetwork } from 'wagmi'
+import { useCallback } from 'react'
+import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
 
 /**
  * Constants & Helpers
@@ -16,21 +15,13 @@ const localProvider = new providers.StaticJsonRpcProvider(
 /**
  * Component
  */
-const Home: NextPage = () => {
-  const [isLocalChain, setIsLocalChain] = useState(false)
-
+export const LocalFaucetButton = () => {
   const { data: session } = useSession()
   const address = session?.user?.name
 
-  const { chain } = useNetwork()
+  const { isLocalChain } = useCheckLocalChain()
 
   const toast = useToast()
-
-  useEffect(() => {
-    if (chain && chain.id === 1337) {
-      setIsLocalChain(true)
-    }
-  }, [chain])
 
   // Use the localProvider as the signer to send ETH to our wallet
   const sendFunds = useCallback(async () => {
@@ -60,5 +51,3 @@ const Home: NextPage = () => {
     </Button>
   )
 }
-
-export default Home

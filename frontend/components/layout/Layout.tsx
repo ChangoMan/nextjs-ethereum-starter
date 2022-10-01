@@ -2,7 +2,7 @@ import { Container, Flex, Link, SimpleGrid, Text } from '@chakra-ui/react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import NextLink from 'next/link'
 import React from 'react'
-import LocalFaucetButton from '../LocalFaucetButton'
+import { LocalFaucetButton } from '../LocalFaucetButton'
 import { Head, MetaProps } from './Head'
 
 interface LayoutProps {

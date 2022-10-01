@@ -15,7 +15,6 @@ import {
   useContractRead,
   useContractReads,
   useContractWrite,
-  useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
@@ -23,6 +22,7 @@ import { YourNFTContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contract
 import YourNFT from '../artifacts/contracts/YourNFT.sol/YourNFT.json'
 import { Layout } from '../components/layout/Layout'
 import { NftList } from '../components/NftList'
+import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
 import { generateTokenUri } from '../utils/generateTokenUri'
 
 const GOERLI_CONTRACT_ADDRESS = '0x982659f8ce3988096A735044aD42445D6514ba7e'
@@ -48,7 +48,8 @@ const ipfs = create({
 
 const NftIndex: NextPage = () => {
   const [nftUri, setNftUri] = useState('')
-  const [isLocalChain, setIsLocalChain] = useState(false)
+
+  const { isLocalChain } = useCheckLocalChain()
 
   const hasNftUri = Boolean(nftUri)
 
@@ -56,7 +57,6 @@ const NftIndex: NextPage = () => {
     ? LOCAL_CONTRACT_ADDRESS
     : GOERLI_CONTRACT_ADDRESS
 
-  const { chain } = useNetwork()
   const { data: session } = useSession()
   const address = session?.user?.name
 
@@ -200,12 +200,6 @@ const NftIndex: NextPage = () => {
       write()
     }
   }, [hasNftUri, write])
-
-  useEffect(() => {
-    if (chain && chain.id === 1337) {
-      setIsLocalChain(true)
-    }
-  }, [chain])
 
   return (
     <Layout>

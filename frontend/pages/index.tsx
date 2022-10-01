@@ -13,10 +13,9 @@ import {
 import { ethers, providers } from 'ethers'
 import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
-import { useEffect, useReducer } from 'react'
+import { useReducer } from 'react'
 import {
   useContractWrite,
-  useNetwork,
   usePrepareContractWrite,
   useProvider,
   useWaitForTransaction,
@@ -24,6 +23,7 @@ import {
 import { YourContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
 import { Layout } from '../components/layout/Layout'
+import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
 import { YourContract as YourContractType } from '../types/typechain'
 
 /**
@@ -42,7 +42,6 @@ const GOERLI_CONTRACT_ADDRESS = '0x3B73833638556f10ceB1b49A18a27154e3828303'
 type StateType = {
   greeting: string
   inputValue: string
-  isLocalChain: boolean
 }
 type ActionType =
   | {
@@ -53,10 +52,6 @@ type ActionType =
       type: 'SET_INPUT_VALUE'
       inputValue: StateType['inputValue']
     }
-  | {
-      type: 'SET_IS_LOCAL_CHAIN'
-      isLocalChain: StateType['isLocalChain']
-    }
 
 /**
  * Component
@@ -64,7 +59,6 @@ type ActionType =
 const initialState: StateType = {
   greeting: '',
   inputValue: '',
-  isLocalChain: false,
 }
 
 function reducer(state: StateType, action: ActionType): StateType {
@@ -80,11 +74,6 @@ function reducer(state: StateType, action: ActionType): StateType {
         ...state,
         inputValue: action.inputValue,
       }
-    case 'SET_IS_LOCAL_CHAIN':
-      return {
-        ...state,
-        isLocalChain: action.isLocalChain,
-      }
     default:
       throw new Error()
   }
@@ -93,14 +82,15 @@ function reducer(state: StateType, action: ActionType): StateType {
 const Home: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const CONTRACT_ADDRESS = state.isLocalChain
+  const { isLocalChain } = useCheckLocalChain()
+
+  const CONTRACT_ADDRESS = isLocalChain
     ? LOCAL_CONTRACT_ADDRESS
     : GOERLI_CONTRACT_ADDRESS
 
   const { data: session } = useSession()
   const address = session?.user?.name
 
-  const { chain } = useNetwork()
   const provider = useProvider()
 
   const toast = useToast()
@@ -140,12 +130,6 @@ const Home: NextPage = () => {
       })
     },
   })
-
-  useEffect(() => {
-    if (chain && chain.id === 1337) {
-      dispatch({ type: 'SET_IS_LOCAL_CHAIN', isLocalChain: true })
-    }
-  }, [chain])
 
   // call the smart contract, read the current greeting value
   async function fetchContractGreeting() {
