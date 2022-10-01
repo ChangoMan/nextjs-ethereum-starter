@@ -1,3 +1,6 @@
+// TODO: There is currently a bug with @rainbow-me/rainbowkit/wallets type checking.
+// Remove this `ts-nocheck` when this gets fixed.
+// @ts-nocheck
 import { ChakraProvider } from '@chakra-ui/react'
 import {
   connectorsForWallets,
