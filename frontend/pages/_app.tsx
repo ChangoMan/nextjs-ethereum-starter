@@ -4,13 +4,17 @@ import {
   darkTheme,
   getDefaultWallets,
   RainbowKitProvider,
-  wallet,
 } from '@rainbow-me/rainbowkit'
 import {
   GetSiweMessageOptions,
   RainbowKitSiweNextAuthProvider,
 } from '@rainbow-me/rainbowkit-siwe-next-auth'
 import '@rainbow-me/rainbowkit/styles.css'
+import {
+  argentWallet,
+  ledgerWallet,
+  trustWallet,
+} from '@rainbow-me/rainbowkit/wallets'
 import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
@@ -53,9 +57,9 @@ const connectors = connectorsForWallets([
   {
     groupName: 'Other',
     wallets: [
-      wallet.argent({ chains }),
-      wallet.trust({ chains }),
-      wallet.ledger({ chains }),
+      argentWallet({ chains }),
+      trustWallet({ chains }),
+      ledgerWallet({ chains }),
     ],
   },
 ])
