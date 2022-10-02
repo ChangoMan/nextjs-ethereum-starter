@@ -92,6 +92,7 @@ const TokenGated: NextPage = () => {
         <Heading as="h1" mb="8">
           Token Gated Page
         </Heading>
+        {sharedDescription}
         <Alert status="error">
           <AlertIcon />
           <AlertTitle>Error:</AlertTitle>
