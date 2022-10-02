@@ -1,6 +1,3 @@
-// TODO: There is currently a bug with @rainbow-me/rainbowkit/wallets type checking.
-// Remove this `ts-nocheck` when this gets fixed.
-// @ts-nocheck
 import { ChakraProvider } from '@chakra-ui/react'
 import {
   connectorsForWallets,
@@ -13,11 +10,7 @@ import {
   RainbowKitSiweNextAuthProvider,
 } from '@rainbow-me/rainbowkit-siwe-next-auth'
 import '@rainbow-me/rainbowkit/styles.css'
-import {
-  argentWallet,
-  ledgerWallet,
-  trustWallet,
-} from '@rainbow-me/rainbowkit/wallets'
+import type { Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
@@ -55,17 +48,7 @@ const demoAppInfo = {
   appName: 'Rainbowkit Demo',
 }
 
-const connectors = connectorsForWallets([
-  ...wallets,
-  {
-    groupName: 'Other',
-    wallets: [
-      argentWallet({ chains }),
-      trustWallet({ chains }),
-      ledgerWallet({ chains }),
-    ],
-  },
-])
+const connectors = connectorsForWallets(wallets)
 
 const wagmiClient = createClient({
   autoConnect: true,
@@ -78,9 +61,12 @@ const getSiweMessageOptions: GetSiweMessageOptions = () => ({
   statement: 'Sign in to the RainbowKit + SIWE example app',
 })
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps<{ session: Session }>) {
   return (
-    <SessionProvider refetchInterval={0} session={pageProps.session}>
+    <SessionProvider refetchInterval={0} session={session}>
       <WagmiConfig client={wagmiClient}>
         <RainbowKitSiweNextAuthProvider
           getSiweMessageOptions={getSiweMessageOptions}
