@@ -1748,10 +1748,10 @@
   resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit-siwe-next-auth/-/rainbowkit-siwe-next-auth-0.1.4.tgz#b61416ac02c5896f53f2adfe7ca0c62418d1766e"
   integrity sha512-wW4/yhMjYImaHWeg9CvZB/6ZbmwVA0BfDWmvqgG8yzkkxta4cGFA9glTqlq/+fsgAkXqdjBy7pYoidcIDpmTCA==
 
-"@rainbow-me/rainbowkit@^0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-0.7.3.tgz#370bc1b136be64401669b0ad903215b0d149fc67"
-  integrity sha512-a0AdR8F+XcwmtX2Y074Y4dZRfl+3OShJidhQ9FmCTJ3FXsc3JAEXiJGJuoTjiK7QdZtI1BVk/+2W3NEdCIa+8Q==
+"@rainbow-me/rainbowkit@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-0.7.4.tgz#5cf25d9108ae125c3b1b2b6ddb01d785940011bd"
+  integrity sha512-o3kwaHZw9O40gfK2DamJZzoqPbK7EHC+8++QtFy5AQ0Sw5P+U0tzb/87KHatSIXyIwrZTEGD0uciPjCGikJMjg==
   dependencies:
     "@vanilla-extract/css" "1.9.1"
     "@vanilla-extract/dynamic" "2.0.2"
@@ -1912,10 +1912,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.55.tgz#c329cbd434c42164f846b909bd6f85b5537f6240"
   integrity sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==
 
-"@types/node@^18.11.5":
-  version "18.11.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.5.tgz#1bc94cf2f9ab5fe33353bc7c79c797dcc5325bef"
-  integrity sha512-3JRwhbjI+cHLAkUorhf8RnqUbFXajvzX4q6fMn5JwkgtuwfYtRQYI3u4V92vI6NJuTsbBQWWh3RZjFsuevyMGQ==
+"@types/node@^18.11.7":
+  version "18.11.7"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.7.tgz#8ccef136f240770c1379d50100796a6952f01f94"
+  integrity sha512-LhFTglglr63mNXUSRYD8A+ZAIu5sFqNJ4Y2fPuY7UlrySJH87rRRlhtVmMHplmfk5WkoJGmDjE9oiTfyX94CpQ==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -2040,10 +2040,10 @@
   resolved "https://registry.yarnpkg.com/@vanilla-extract/sprinkles/-/sprinkles-1.5.0.tgz#c921183ae518bb484299c2dc81f2acefd91c3dbe"
   integrity sha512-W58f2Rzz5lLmk0jbhgStVlZl5wEiPB1Ur3fRvUaBM+MrifZ3qskmFq/CiH//fEYeG5Dh9vF1qRviMMH46cX9Nw==
 
-"@wagmi/core@^0.6.5":
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.6.5.tgz#e6f05fe5635b79a006ce07ae5dd61b7105000d34"
-  integrity sha512-BENo42tvfaJKnf6dRjSbjFjALlDI6UASDvLdZmAHeblq15OvK0Mi9095dv6a7+linJgRdm/2C5KAmhzyTUCVqg==
+"@wagmi/core@^0.6.6":
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.6.6.tgz#f39e6819b12d3c21d28a62b0523a7851992ace26"
+  integrity sha512-1gEjDFmlJ6R2uF6BX04Q768OdpoW/pNGGUTaJU+W7YP/3uOf4TwsXgqMEN/0uyZqptL+RQsworeVh11JXCbX1g==
   dependencies:
     abitype "^0.1.7"
     eventemitter3 "^4.0.7"
@@ -5862,16 +5862,16 @@ varint@^6.0.0:
   resolved "https://registry.yarnpkg.com/varint/-/varint-6.0.0.tgz#9881eb0ce8feaea6512439d19ddf84bf551661d0"
   integrity sha512-cXEIW6cfr15lFv563k4GuVuW/fiwjknytD37jIOLSdSWuOI6WnO/oKwmP2FQTU2l01LP8/M5TSAJpzUaGe3uWg==
 
-wagmi@^0.7.6:
-  version "0.7.6"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.7.6.tgz#4a84ecd04a656cb00aa3a222a7610f281cae6a22"
-  integrity sha512-4aEPxqbn/BKoXwiQ8/frKy61bnwCnHeUVYHVJCdgPpiT3xsw2svbDI6KXW4+ciEDi6yW6Bo/ihDB4x4xKaKU/A==
+wagmi@^0.7.7:
+  version "0.7.7"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.7.7.tgz#7d120778e1e88476e9275e05c8123623f5719199"
+  integrity sha512-Pxp6iYMY+8LqSenY35EkIPxG64W4QDb3XtuhH48PqFZ8k3OE9KWpYyS2ooOMqa8bdPPCIpE/HDeTNciBJoimeQ==
   dependencies:
     "@coinbase/wallet-sdk" "^3.5.3"
     "@tanstack/query-sync-storage-persister" "^4.10.1"
     "@tanstack/react-query" "^4.10.1"
     "@tanstack/react-query-persist-client" "^4.10.1"
-    "@wagmi/core" "^0.6.5"
+    "@wagmi/core" "^0.6.6"
     "@walletconnect/ethereum-provider" "^1.8.0"
     abitype "^0.1.7"
     use-sync-external-store "^1.2.0"
