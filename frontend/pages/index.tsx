@@ -10,7 +10,7 @@ import {
   UnorderedList,
   useToast,
 } from '@chakra-ui/react'
-import { ethers } from 'ethers'
+import { ethers, providers } from 'ethers'
 import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import { useReducer } from 'react'
@@ -29,6 +29,11 @@ import { YourContract as YourContractType } from '../types/typechain'
 /**
  * Constants & Helpers
  */
+
+const localProvider = new providers.StaticJsonRpcProvider(
+  'http://localhost:8545'
+)
+
 const GOERLI_CONTRACT_ADDRESS = '0x3B73833638556f10ceB1b49A18a27154e3828303'
 
 /**
