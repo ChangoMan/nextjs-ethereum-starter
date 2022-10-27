@@ -91,10 +91,10 @@ const Home: NextPage = () => {
   const toast = useToast()
 
   const { config } = usePrepareContractWrite({
-    addressOrName: CONTRACT_ADDRESS,
-    contractInterface: YourContract.abi,
+    address: CONTRACT_ADDRESS,
+    abi: YourContract.abi,
     functionName: 'setGreeting',
-    args: state.inputValue,
+    args: [state.inputValue],
     enabled: Boolean(state.inputValue),
   })
 
