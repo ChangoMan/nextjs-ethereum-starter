@@ -66,7 +66,7 @@ const TokenGated: NextPage = () => {
           CodeBushiToken (CBT)
         </Link>{' '}
         on the GOERLI Testnet. You can test this out by{' '}
-        <NextLink href="/nft" passHref>
+        <NextLink href="/nft" passHref legacyBehavior>
           <Link color="teal.500">Minting the NFT</Link>
         </NextLink>
         .

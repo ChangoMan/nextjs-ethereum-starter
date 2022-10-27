@@ -33,10 +33,7 @@ const { chains, provider, webSocketProvider } = configureChains(
         ]
       : []),
   ],
-  [
-    alchemyProvider({ apiKey: '_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC' }),
-    publicProvider(),
-  ]
+  [alchemyProvider(), publicProvider()]
 )
 
 const { wallets } = getDefaultWallets({
