@@ -15,6 +15,7 @@ import { erc721ABI, useAccount, useContractRead } from 'wagmi'
 import { YourNFTContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import { Layout } from '../components/layout/Layout'
 import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
+import { useIsMounted } from '../hooks/useIsMounted'
 
 const GOERLI_CONTRACT_ADDRESS = '0x982659f8ce3988096A735044aD42445D6514ba7e'
 
@@ -22,6 +23,8 @@ const TokenGated: NextPage = () => {
   const { address, isConnected } = useAccount()
 
   const { isLocalChain } = useCheckLocalChain()
+
+  const { isMounted } = useIsMounted()
 
   const CONTRACT_ADDRESS = isLocalChain
     ? LOCAL_CONTRACT_ADDRESS
@@ -48,6 +51,10 @@ const TokenGated: NextPage = () => {
       setHasNft(false)
     }
   }, [data, isLoading])
+
+  if (!isMounted) {
+    return null
+  }
 
   const sharedDescription = (
     <>

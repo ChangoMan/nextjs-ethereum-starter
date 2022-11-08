@@ -24,6 +24,7 @@ import { YourContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/c
 import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
 import { Layout } from '../components/layout/Layout'
 import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
+import { useIsMounted } from '../hooks/useIsMounted'
 import { YourContract as YourContractType } from '../types/typechain'
 
 /**
@@ -78,6 +79,8 @@ const Home: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const { isLocalChain } = useCheckLocalChain()
+
+  const { isMounted } = useIsMounted()
 
   const CONTRACT_ADDRESS = isLocalChain
     ? LOCAL_CONTRACT_ADDRESS
@@ -141,6 +144,10 @@ const Home: NextPage = () => {
         console.log('Error: ', err)
       }
     }
+  }
+
+  if (!isMounted) {
+    return null
   }
 
   return (
