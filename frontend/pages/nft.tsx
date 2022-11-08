@@ -12,6 +12,7 @@ import type { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
+  erc721ABI,
   useContractRead,
   useContractReads,
   useContractWrite,
@@ -65,7 +66,7 @@ const NftIndex: NextPage = () => {
   const CONTRACT_CONFIG = useMemo(() => {
     return {
       address: CONTRACT_ADDRESS,
-      abi: YourNFT.abi,
+      abi: erc721ABI,
     }
   }, [CONTRACT_ADDRESS])
 
@@ -74,7 +75,7 @@ const NftIndex: NextPage = () => {
     useContractRead({
       ...CONTRACT_CONFIG,
       functionName: 'balanceOf',
-      args: [address],
+      args: address ? [address] : undefined,
     })
 
   // Creates the contracts array for `nftTokenIds`
@@ -128,7 +129,8 @@ const NftIndex: NextPage = () => {
   })
 
   const { config } = usePrepareContractWrite({
-    ...CONTRACT_CONFIG,
+    address: CONTRACT_ADDRESS,
+    abi: YourNFT.abi,
     functionName: 'safeMint',
     args: [address, nftUri],
     enabled: hasNftUri,
