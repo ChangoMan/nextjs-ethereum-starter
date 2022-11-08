@@ -60,7 +60,9 @@ export function getAuthOptions(req: IncomingMessage): NextAuthOptions {
 
   return {
     callbacks: {
-      async session({ session, token }) {
+      async session({ session, token }: { session: any; token: any }) {
+        console.log('session', session)
+        console.log('token', token)
         session.address = token.sub
         session.user = {
           name: token.sub,
