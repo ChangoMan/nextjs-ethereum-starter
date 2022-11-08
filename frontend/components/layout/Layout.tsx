@@ -28,11 +28,6 @@ export const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                   Home
                 </Link>
               </NextLink>
-              <NextLink href="/authenticated" passHref legacyBehavior>
-                <Link px="4" py="1">
-                  Authenticated
-                </Link>
-              </NextLink>
               <NextLink href="/nft" passHref legacyBehavior>
                 <Link px="4" py="1">
                   Mint NFT

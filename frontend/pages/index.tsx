@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react'
 import { ethers } from 'ethers'
 import type { NextPage } from 'next'
-import { useSession } from 'next-auth/react'
 import { useReducer } from 'react'
 import {
+  useAccount,
   useContractWrite,
   usePrepareContractWrite,
   useProvider,
@@ -83,8 +83,7 @@ const Home: NextPage = () => {
     ? LOCAL_CONTRACT_ADDRESS
     : GOERLI_CONTRACT_ADDRESS
 
-  const { data: session } = useSession()
-  const address = session?.user?.name
+  const { address } = useAccount()
 
   const provider = useProvider()
 
