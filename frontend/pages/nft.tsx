@@ -64,8 +64,8 @@ const NftIndex: NextPage = () => {
 
   const CONTRACT_CONFIG = useMemo(() => {
     return {
-      addressOrName: CONTRACT_ADDRESS,
-      contractInterface: YourNFT.abi,
+      address: CONTRACT_ADDRESS,
+      abi: YourNFT.abi,
     }
   }, [CONTRACT_ADDRESS])
 
@@ -74,7 +74,7 @@ const NftIndex: NextPage = () => {
     useContractRead({
       ...CONTRACT_CONFIG,
       functionName: 'balanceOf',
-      args: address,
+      args: [address],
     })
 
   // Creates the contracts array for `nftTokenIds`
