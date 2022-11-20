@@ -20,6 +20,9 @@ import {
   useWaitForTransaction,
 } from 'wagmi'
 import { YourNFTContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
+// `YourNFT.js` was made manually from `YourNFT.json`, since wagmi hooks require a `const` for the `abi` input.
+// If you update the `YourNFT` contract, be sure to update this `YourNFT.js` file as well.
+// Simply copy the array from `abi: []` found in `YourNFT.json`.
 import { YourNFT_ABI } from '../artifacts/contracts/YourNFT.sol/YourNFT.js'
 import { Layout } from '../components/layout/Layout'
 import { NftList } from '../components/NftList'
