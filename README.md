@@ -48,7 +48,7 @@ This will install the frontend packages. We also need to set up the local config
 cp .env.local.example .env.local
 ```
 
-This will create a file called `.env.local`. Open up that file and fill in the `NEXTAUTH_SECRET=` environment variable.
+This will create a file called `.env.local`. Open up that file and fill in the `NEXT_PUBLIC_ALCHEMY_API_KEY=` and `NEXT_PUBLIC_UNSPLASH_ACCESS_KEY=` environment variables.
 
 ```bash
 yarn dev
