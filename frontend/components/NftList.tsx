@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react'
 interface NftListProps {
   address?: string | null
   ipfs: IPFSHTTPClient
-  nftTokenUris: Array<Result>
+  nftTokenUris: Array<Result> | Array<unknown>
 }
 
 type NftMetadataType = {
@@ -50,7 +50,7 @@ export const NftList = ({
 
     const processTokenUris = async () => {
       const nftData = await Promise.all(
-        nftTokenUris.map(async (tokenUri) => {
+        nftTokenUris.map(async (tokenUri: any = '') => {
           if (tokenUri) {
             const ipfsHash = tokenUri.replace('https://ipfs.io/ipfs/', '')
             const ipfsData = await fetchNftData(ipfsHash)
