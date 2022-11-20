@@ -51,14 +51,22 @@ export const NftList = ({
     const processTokenUris = async () => {
       const nftData = await Promise.all(
         nftTokenUris.map(async (tokenUri) => {
-          const ipfsHash = tokenUri.replace('https://ipfs.io/ipfs/', '')
-          const ipfsData = await fetchNftData(ipfsHash)
-          return ipfsData
+          if (tokenUri) {
+            const ipfsHash = tokenUri.replace('https://ipfs.io/ipfs/', '')
+            const ipfsData = await fetchNftData(ipfsHash)
+            return ipfsData
+          }
+
+          return {
+            image: '',
+            name: '',
+          }
         })
       )
 
       setNfts(nftData)
     }
+
     processTokenUris()
   }, [ipfs, nftTokenUris])
 

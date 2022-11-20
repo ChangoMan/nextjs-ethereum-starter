@@ -23,6 +23,7 @@ import YourNFT from '../artifacts/contracts/YourNFT.sol/YourNFT.json'
 import { Layout } from '../components/layout/Layout'
 import { NftList } from '../components/NftList'
 import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
+import { useIsMounted } from '../hooks/useIsMounted'
 import { generateTokenUri } from '../utils/generateTokenUri'
 
 const GOERLI_CONTRACT_ADDRESS = '0x982659f8ce3988096A735044aD42445D6514ba7e'
@@ -51,6 +52,8 @@ const NftIndex: NextPage = () => {
 
   const { isLocalChain } = useCheckLocalChain()
 
+  const { isMounted } = useIsMounted()
+
   const hasNftUri = Boolean(nftUri)
 
   const CONTRACT_ADDRESS = isLocalChain
@@ -73,7 +76,7 @@ const NftIndex: NextPage = () => {
     useContractRead({
       ...CONTRACT_CONFIG,
       functionName: 'balanceOf',
-      args: [address],
+      args: address ? [address] : undefined,
     })
 
   // Creates the contracts array for `nftTokenIds`
@@ -113,7 +116,7 @@ const NftIndex: NextPage = () => {
       return {
         ...CONTRACT_CONFIG,
         functionName: 'tokenURI',
-        args: tokenId,
+        args: tokenId ? [tokenId] : undefined,
       }
     })
 
@@ -199,6 +202,10 @@ const NftIndex: NextPage = () => {
       write()
     }
   }, [hasNftUri, write])
+
+  if (!isMounted) {
+    return null
+  }
 
   return (
     <Layout>
