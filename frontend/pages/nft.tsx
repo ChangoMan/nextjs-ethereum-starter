@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { create } from 'ipfs-http-client'
 import type { NextPage } from 'next'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   erc721ABI,
   useAccount,
@@ -20,7 +20,7 @@ import {
   useWaitForTransaction,
 } from 'wagmi'
 import { YourNFTContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
-import YourNFT from '../artifacts/contracts/YourNFT.sol/YourNFT.json'
+import { YourNFT_ABI } from '../artifacts/contracts/YourNFT.sol/YourNFT.js'
 import { Layout } from '../components/layout/Layout'
 import { NftList } from '../components/NftList'
 import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
@@ -49,13 +49,12 @@ const ipfs = create({
 })
 
 const NftIndex: NextPage = () => {
-  const [nftUri, setNftUri] = useState('')
+  const [hasNftUri, setHasNftUri] = useState(false)
+  const nftUriRef = useRef('')
 
   const { isLocalChain } = useCheckLocalChain()
 
   const { isMounted } = useIsMounted()
-
-  const hasNftUri = Boolean(nftUri)
 
   const CONTRACT_ADDRESS = isLocalChain
     ? LOCAL_CONTRACT_ADDRESS
@@ -68,7 +67,7 @@ const NftIndex: NextPage = () => {
   const CONTRACT_CONFIG = useMemo(() => {
     return {
       address: CONTRACT_ADDRESS,
-      abi: YourNFT.abi,
+      abi: YourNFT_ABI,
     }
   }, [CONTRACT_ADDRESS])
 
@@ -131,10 +130,10 @@ const NftIndex: NextPage = () => {
     enabled: tokenUriContractsArray.length > 0,
   })
 
-  const { config } = usePrepareContractWrite({
+  const { config, isFetched } = usePrepareContractWrite({
     ...CONTRACT_CONFIG,
     functionName: 'safeMint',
-    args: [address, nftUri],
+    args: [address, nftUriRef.current],
     enabled: hasNftUri,
   })
 
@@ -144,7 +143,8 @@ const NftIndex: NextPage = () => {
     hash: data?.hash,
     onSuccess(data) {
       console.log('success data', data)
-      setNftUri('')
+      setHasNftUri(false)
+      nftUriRef.current = ''
       toast({
         title: 'Transaction Successful',
         description: (
@@ -193,7 +193,8 @@ const NftIndex: NextPage = () => {
       const uploaded = await ipfs.add(tokenURI)
 
       // // This will trigger the useEffect to run the `write()` function.
-      setNftUri(`${IPFS_BASE_URL}/${uploaded.path}`)
+      setHasNftUri(true)
+      nftUriRef.current = `${IPFS_BASE_URL}/${uploaded.path}`
     } catch (error) {
       console.log('error', error)
     }
@@ -202,6 +203,7 @@ const NftIndex: NextPage = () => {
   useEffect(() => {
     if (hasNftUri && write) {
       write()
+      setHasNftUri(false)
     }
   }, [hasNftUri, write])
 
