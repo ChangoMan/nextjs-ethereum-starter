@@ -11,6 +11,7 @@ import { create } from 'ipfs-http-client'
 import type { NextPage } from 'next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
+  erc721ABI,
   useAccount,
   useContractRead,
   useContractReads,
@@ -74,7 +75,8 @@ const NftIndex: NextPage = () => {
   // Gets the total number of NFTs owned by the connected address.
   const { data: nftBalanceData, refetch: refetchNftBalanceData } =
     useContractRead({
-      ...CONTRACT_CONFIG,
+      address: CONTRACT_ADDRESS,
+      abi: erc721ABI,
       functionName: 'balanceOf',
       args: address ? [address] : undefined,
     })

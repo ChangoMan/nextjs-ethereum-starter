@@ -11,7 +11,7 @@ import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 
-const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || ''
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -20,13 +20,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     chain.optimism,
     chain.arbitrum,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
-      ? [
-          chain.goerli,
-          chain.kovan,
-          chain.rinkeby,
-          chain.ropsten,
-          chain.localhost,
-        ]
+      ? [chain.goerli, chain.localhost]
       : []),
   ],
   [
