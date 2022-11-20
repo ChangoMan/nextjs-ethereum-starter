@@ -9,9 +9,10 @@ import {
 } from '@chakra-ui/react'
 import { create } from 'ipfs-http-client'
 import type { NextPage } from 'next'
-import { useSession } from 'next-auth/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
+  erc721ABI,
+  useAccount,
   useContractRead,
   useContractReads,
   useContractWrite,
@@ -19,10 +20,11 @@ import {
   useWaitForTransaction,
 } from 'wagmi'
 import { YourNFTContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
-import YourNFT from '../artifacts/contracts/YourNFT.sol/YourNFT.json'
+import { YourNFT_ABI } from '../artifacts/contracts/YourNFT.sol/YourNFT.js'
 import { Layout } from '../components/layout/Layout'
 import { NftList } from '../components/NftList'
 import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
+import { useIsMounted } from '../hooks/useIsMounted'
 import { generateTokenUri } from '../utils/generateTokenUri'
 
 const GOERLI_CONTRACT_ADDRESS = '0x982659f8ce3988096A735044aD42445D6514ba7e'
@@ -47,34 +49,35 @@ const ipfs = create({
 })
 
 const NftIndex: NextPage = () => {
-  const [nftUri, setNftUri] = useState('')
+  const [hasNftUri, setHasNftUri] = useState(false)
+  const nftUriRef = useRef('')
 
   const { isLocalChain } = useCheckLocalChain()
 
-  const hasNftUri = Boolean(nftUri)
+  const { isMounted } = useIsMounted()
 
   const CONTRACT_ADDRESS = isLocalChain
     ? LOCAL_CONTRACT_ADDRESS
     : GOERLI_CONTRACT_ADDRESS
 
-  const { data: session } = useSession()
-  const address = session?.user?.name
+  const { address } = useAccount()
 
   const toast = useToast()
 
   const CONTRACT_CONFIG = useMemo(() => {
     return {
-      addressOrName: CONTRACT_ADDRESS,
-      contractInterface: YourNFT.abi,
+      address: CONTRACT_ADDRESS,
+      abi: YourNFT_ABI,
     }
   }, [CONTRACT_ADDRESS])
 
   // Gets the total number of NFTs owned by the connected address.
   const { data: nftBalanceData, refetch: refetchNftBalanceData } =
     useContractRead({
-      ...CONTRACT_CONFIG,
+      address: CONTRACT_ADDRESS,
+      abi: erc721ABI,
       functionName: 'balanceOf',
-      args: address,
+      args: address ? [address] : undefined,
     })
 
   // Creates the contracts array for `nftTokenIds`
@@ -114,7 +117,7 @@ const NftIndex: NextPage = () => {
       return {
         ...CONTRACT_CONFIG,
         functionName: 'tokenURI',
-        args: tokenId,
+        args: tokenId ? [tokenId] : undefined,
       }
     })
 
@@ -127,10 +130,10 @@ const NftIndex: NextPage = () => {
     enabled: tokenUriContractsArray.length > 0,
   })
 
-  const { config } = usePrepareContractWrite({
+  const { config, isFetched } = usePrepareContractWrite({
     ...CONTRACT_CONFIG,
     functionName: 'safeMint',
-    args: [address, nftUri],
+    args: [address, nftUriRef.current],
     enabled: hasNftUri,
   })
 
@@ -140,7 +143,8 @@ const NftIndex: NextPage = () => {
     hash: data?.hash,
     onSuccess(data) {
       console.log('success data', data)
-      setNftUri('')
+      setHasNftUri(false)
+      nftUriRef.current = ''
       toast({
         title: 'Transaction Successful',
         description: (
@@ -189,7 +193,8 @@ const NftIndex: NextPage = () => {
       const uploaded = await ipfs.add(tokenURI)
 
       // // This will trigger the useEffect to run the `write()` function.
-      setNftUri(`${IPFS_BASE_URL}/${uploaded.path}`)
+      setHasNftUri(true)
+      nftUriRef.current = `${IPFS_BASE_URL}/${uploaded.path}`
     } catch (error) {
       console.log('error', error)
     }
@@ -198,8 +203,13 @@ const NftIndex: NextPage = () => {
   useEffect(() => {
     if (hasNftUri && write) {
       write()
+      setHasNftUri(false)
     }
   }, [hasNftUri, write])
+
+  if (!isMounted) {
+    return null
+  }
 
   return (
     <Layout>

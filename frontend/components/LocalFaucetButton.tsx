@@ -1,7 +1,7 @@
 import { Button, useToast } from '@chakra-ui/react'
 import { ethers, providers } from 'ethers'
-import { useSession } from 'next-auth/react'
 import { useCallback } from 'react'
+import { useAccount } from 'wagmi'
 import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
 
 /**
@@ -16,8 +16,7 @@ const localProvider = new providers.StaticJsonRpcProvider(
  * Component
  */
 export const LocalFaucetButton = () => {
-  const { data: session } = useSession()
-  const address = session?.user?.name
+  const { address } = useAccount()
 
   const { isLocalChain } = useCheckLocalChain()
 

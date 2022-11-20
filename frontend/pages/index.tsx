@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react'
 import { ethers, providers } from 'ethers'
 import type { NextPage } from 'next'
-import { useSession } from 'next-auth/react'
 import { useReducer } from 'react'
 import {
+  useAccount,
   useContractWrite,
   usePrepareContractWrite,
   useProvider,
@@ -24,6 +24,7 @@ import { YourContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/c
 import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
 import { Layout } from '../components/layout/Layout'
 import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
+import { useIsMounted } from '../hooks/useIsMounted'
 import { YourContract as YourContractType } from '../types/typechain'
 
 /**
@@ -84,22 +85,23 @@ const Home: NextPage = () => {
 
   const { isLocalChain } = useCheckLocalChain()
 
+  const { isMounted } = useIsMounted()
+
   const CONTRACT_ADDRESS = isLocalChain
     ? LOCAL_CONTRACT_ADDRESS
     : GOERLI_CONTRACT_ADDRESS
 
-  const { data: session } = useSession()
-  const address = session?.user?.name
+  const { address } = useAccount()
 
   const provider = useProvider()
 
   const toast = useToast()
 
   const { config } = usePrepareContractWrite({
-    addressOrName: CONTRACT_ADDRESS,
-    contractInterface: YourContract.abi,
+    address: CONTRACT_ADDRESS,
+    abi: YourContract.abi,
     functionName: 'setGreeting',
-    args: state.inputValue,
+    args: [state.inputValue],
     enabled: Boolean(state.inputValue),
   })
 
@@ -147,6 +149,10 @@ const Home: NextPage = () => {
         console.log('Error: ', err)
       }
     }
+  }
+
+  if (!isMounted) {
+    return null
   }
 
   return (

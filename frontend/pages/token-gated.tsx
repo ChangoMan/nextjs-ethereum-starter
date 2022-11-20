@@ -9,23 +9,22 @@ import {
   Text,
 } from '@chakra-ui/react'
 import type { NextPage } from 'next'
-import { useSession } from 'next-auth/react'
 import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
-import { erc721ABI, useContractRead } from 'wagmi'
+import { erc721ABI, useAccount, useContractRead } from 'wagmi'
 import { YourNFTContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
 import { Layout } from '../components/layout/Layout'
 import { useCheckLocalChain } from '../hooks/useCheckLocalChain'
+import { useIsMounted } from '../hooks/useIsMounted'
 
 const GOERLI_CONTRACT_ADDRESS = '0x982659f8ce3988096A735044aD42445D6514ba7e'
 
 const TokenGated: NextPage = () => {
-  const { data: session, status } = useSession()
-  const address = session?.user?.name
-
-  const isAuthenticated = status === 'authenticated'
+  const { address, isConnected } = useAccount()
 
   const { isLocalChain } = useCheckLocalChain()
+
+  const { isMounted } = useIsMounted()
 
   const CONTRACT_ADDRESS = isLocalChain
     ? LOCAL_CONTRACT_ADDRESS
@@ -34,10 +33,10 @@ const TokenGated: NextPage = () => {
   const [hasNft, setHasNft] = useState(false)
 
   const { data, isError, isLoading } = useContractRead({
-    addressOrName: CONTRACT_ADDRESS,
-    contractInterface: erc721ABI,
+    address: CONTRACT_ADDRESS,
+    abi: erc721ABI,
     functionName: 'balanceOf',
-    args: address,
+    args: address ? [address] : undefined,
   })
 
   useEffect(() => {
@@ -46,9 +45,16 @@ const TokenGated: NextPage = () => {
 
       if (numberOfNfts > 0) {
         setHasNft(true)
+        return
       }
+
+      setHasNft(false)
     }
   }, [data, isLoading])
+
+  if (!isMounted) {
+    return null
+  }
 
   const sharedDescription = (
     <>
@@ -74,7 +80,7 @@ const TokenGated: NextPage = () => {
     </>
   )
 
-  if (!isAuthenticated) {
+  if (!isConnected) {
     return (
       <Layout>
         <Heading as="h1" mb="8">
