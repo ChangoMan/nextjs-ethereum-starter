@@ -1,4 +1,6 @@
-# nextjs-ethereum-starter
+# nextjs-ethereum-starter (Deprecated!)
+
+This repo may be too old to be of any use. Please see the new [Scaffold ETH 2](https://github.com/scaffold-eth/scaffold-eth-2) which is very similar to this project.
 
 This project was sponsored by the [BuidlGuidl](https://buidlguidl.com). Please support the BuidlGuidl if this project has been helpful!
 
